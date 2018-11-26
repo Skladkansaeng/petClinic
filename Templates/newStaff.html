@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'doctor.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'user.css' %}">
+  </head>
+
+  <body>
+
+    <div class="header">
+      <h1>Pet Clinic</h1>
+    </div>
+
+    <div class="topnav">
+      <a href="../staff/" style="padding-left:35px; padding-right:35px;">Go Back</a>
+      <a href="index.html" style="float:right">Logout</a>
+    </div>
+
+    <div class="row">
+      <div class="column side"></div>
+      <div class="column middle">
+        <div class="card" id="newStaff">
+          <el-form ref="form" :model="form" label-width="130px">
+            <el-form-item label="First Name">
+              <el-input v-model="form.firstName"></el-input>
+            </el-form-item>
+            <el-form-item label="Last Name">
+              <el-input v-model="form.lastName"></el-input>
+            </el-form-item>
+            <el-form-item label="Tel">
+              <el-input v-model="form.tel"></el-input>
+            </el-form-item>
+            <el-form-item label="Email">
+              <el-input v-model="form.email"></el-input>
+            </el-form-item>
+            <el-form-item label="Status">
+              <el-radio-group v-model="form.status" fill="#909497">
+                <el-radio-button label="Staff"></el-radio-button>
+                <el-radio-button label="Doctor"></el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="Username">
+              <el-input v-model="form.username"></el-input>
+            </el-form-item>
+            <el-form-item label="Password">
+              <el-input v-model="form.password" type="password"></el-input>
+            </el-form-item>
+            <el-form-item label="Confirm Password">
+              <el-input v-model="form.cfPassword" type="password"></el-input>
+            </el-form-item>
+            <el-form-item style="margin-left:40%">
+              <el-button type="info" plain @click="createAccount">Create</el-button>
+              <el-button type="info" plain @click="discard">Cancel</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+      <div class="column side"></div>
+    </div>
+
+  </body>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js" charset="utf-8"></script>
+    <!-- import Vue before Element -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui"></script>
+    <script src="https://unpkg.com/element-ui/lib/umd/locale/en.js"></script>
+    <script>
+      ELEMENT.locale(ELEMENT.lang.en)
+    </script>
+    <script src="{% static 'newStaffjs.js' %}" charset="utf-8"></script>
+</html>

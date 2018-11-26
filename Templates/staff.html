@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'staff.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'user.css' %}">
+  </head>
+
+  <body>
+    <div class="header">
+      <h1>Pet Clinic</h1>
+    </div>
+
+    <div class="topnav">
+      <a href="../createStaff">Create Staff Account</a>
+      <a href="index.html" style="float:right">Logout</a>
+    </div>
+
+    <div class="row">
+      <div class="column side"></div>
+      <div class="column middle">
+        <div class="card" id="searching">
+          <el-autocomplete
+            v-model="state4"
+            :fetch-suggestions="querySearchAsync"
+            placeholder="Search"
+            @select="handleSelect"
+            :hide-loading="true"
+          >
+          <!-- <i
+            class="el-icon-search el-input__icon"
+            slot="suffix">
+          </i> -->
+        </el-autocomplete>
+        </div>
+        <div class="card" id="newAccount">
+          <el-button type="info" plain style="font-size:20px;" @click="dialogAccount = true">Create New Account</el-button>
+          <el-dialog title="Edit Profile" :visible.sync="dialogAccount" style="text-align:left;">
+            <el-form :model="form" label-width="15%">
+              <el-form-item label="First Name">
+                <el-input v-model="form.firstName"></el-input>
+              </el-form-item>
+              <el-form-item label="Last Name">
+                <el-input v-model="form.lastName"></el-input>
+              </el-form-item>
+              <el-form-item label="Tel">
+                <el-input v-model="form.tel"></el-input>
+              </el-form-item>
+              <el-form-item label="Email">
+                <el-input v-model="form.email"></el-input>
+              </el-form-item>
+              <el-form-item label="Username">
+                <el-input v-model="form.username" maxlength=20 clearable></el-input>
+              </el-form-item>
+              <el-form-item label="Password">
+                <el-input v-model="form.password" type="password" maxlength=20 clearable></el-input>
+              </el-form-item>
+              <el-form-item label="Confirm Password">
+                <el-input v-model="form.cfPassword" type="password" maxlength=20 clearable></el-input>
+              </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+              <el-button type="info" plain @click="createAccount('form')">Confirm</el-button>
+              <el-button type="info" plain @click="discard('form')">Cancel</el-button>
+            </span>
+          </el-dialog>
+        </div>
+      </div>
+      <div class="column side"></div>
+    </div>
+
+  </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js" charset="utf-8"></script>
+    <!-- import Vue before Element -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui"></script>
+    <script src="https://unpkg.com/element-ui/lib/umd/locale/en.js"></script>
+    <script>
+      ELEMENT.locale(ELEMENT.lang.en)
+    </script>
+    <script src="{% static 'staffjs.js' %}" charset="utf-8"></script>
+
+</html>

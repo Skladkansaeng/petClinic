@@ -1,0 +1,300 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- <META HTTP-EQUIV="Refresh" CONTENT="0;URL=http://www.petClinic.com"> -->
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'user.css' %}">
+  </head>
+
+  <body>
+
+    <div class="header">
+      <h1>Pet Clinic</h1>
+    </div>
+
+    <div class="topnav">
+      <!-- <a href="#">Link</a>
+      <a href="#">Link</a>
+      <a href="#">Link</a> -->
+      <a href="index.html" style="float:right">Logout</a>
+    </div>
+
+    <div class="row">
+      <div class="leftcolumn">
+        <!-- Profile User Card -->
+        <div class="cardd" id="userProfile">
+          <!-- user information -->
+          <h2>Profile</h2>
+          <p>Name: [[name]] [[surname]]</p>
+          <p>Tel: [[tel]]</p>
+          <p>Email: [[email]]</p>
+          <template>
+            <el-button type="text" style="margin-left:75%; color:#797D7F;" @click="openDialog">Edit Profile</el-button>
+          </template>
+          <!-- pop-up for edit profile -->
+          <el-dialog title="Edit Profile" :visible.sync="dialogFormVisible">
+            <el-form :model="form" label-width="15%">
+              <el-form-item label="First Name">
+                <el-input v-model="form.firstName" name="editFirstName"></el-input>
+              </el-form-item>
+              <el-form-item label="Last Name">
+                <el-input v-model="form.lastName" name="editLastName"></el-input>
+              </el-form-item>
+              <el-form-item label="Tel">
+                <el-input v-model="form.telNo" name="editTel"></el-input>
+              </el-form-item>
+              <el-form-item label="Email">
+                <el-input v-model="form.emailAddr" name="editEmail"></el-input>
+              </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+              <el-button type="info" plain @click="changeProfile()">Confirm</el-button>
+              <el-button type="info" plain @click="dialogFormVisible = false">Cancel</el-button>
+            </span>
+          </el-dialog>
+        </div>
+
+        <!-- Pet List Card -->
+        <div class="cardd" id="petList">
+          <h2>Pets</h2>
+          <!-- loop show all pet in listPet -->
+          <div v-for="list in listPet">
+            <!-- watch each pet information, medical record and vaccine record -->
+            <div class="petCard" style="height:80px;" @click="openPetDialog(list)">
+              <!-- each pet information -->
+              <el-row>
+                <el-col :span="15">
+                  Pet Name: [[list.petName]]<br>
+                  Date of Birth: [[list.birthDate]]<br>
+                  Breed: [[list.breed]]
+                </el-col>
+                <el-col :span="9">
+                  Type: [[list.type]]<br>
+                  Age: [[list.age]]<br>
+                  Sickness: [[list.sick]]
+                </el-col>
+              </el-row>
+            </div>
+            <span>
+              <!-- pop-up show selected pet information, medical record and vaccine record -->
+              <el-dialog :visible.sync="petDialogVisible" width=70%>
+                <hr><h2>Pet Information</h2>
+                <el-row>
+                  <el-col :span="11">
+                    <p style="font-size:18px">
+                      Pet Name: [[listPet[selectedIndex].petName]]<br><br>
+                      Date of Birth: [[listPet[selectedIndex].birthDate]]<br><br>
+                      Breed: [[listPet[selectedIndex].breed]]
+                    </p>
+                  </el-col>
+                  <el-col :span="13">
+                    <p style="font-size:18px">
+                      Type: [[listPet[selectedIndex].type]]<br><br>
+                      Age: [[listPet[selectedIndex].age]]<br><br>
+                      Sickness: [[listPet[selectedIndex].sick]]
+                      <!-- edit pet information button -->
+                      <el-button type="info" plain style="float:right" @click="openEditForm()">Edit</el-button>
+                    </p>
+                  </el-col>
+                </el-row><hr>
+                <!-- edit button is pressed -->
+                <div v-if="editPetInfo === true">
+                  <!-- edit pet information form -->
+                  <el-form :model="editPetForm" label-width="15%">
+                    <el-row>
+                      <el-col :span="10">
+                        <el-form-item label="Pet Name" label-width="36%">
+                          <el-input v-model="editPetForm.petName"></el-input>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="12">
+                        <el-form-item label="Breed" label-width="42%">
+                          <el-input v-model="editPetForm.breed"></el-input>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <el-form-item label="Date of Birth">
+                      <el-date-picker type="date" v-model="editPetForm.birthDate"
+                      format="dd/MM/yyyy" placeholder="Select date"></el-date-picker>
+                    </el-form-item>
+                  </el-form>
+                  <!-- delete pet from listPet !!!!Not Finish!!!!-->
+                  <el-button type="info" plain style="float:left" @click="deletePet()">Delete</el-button>
+                  <el-button type="info" plain style="float:right" @click="editPetInfo = false">Cancel</el-button>
+                  <!-- save changes -->
+                  <el-button type="info" plain style="float:right" @click="changePetInfo()">Save</el-button>
+                  <br><br>
+                </div>
+                <div>
+                  <!-- show medical record table -->
+                  <h2>Medical Record</h2>
+                  <el-table :data="medicalRec" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
+                    <el-table-column property="date" label="Date" width="150"></el-table-column>
+                    <el-table-column property="age" label="Age" width="100"></el-table-column>
+                    <el-table-column property="symptom" label="Symptom" width="200"></el-table-column>
+                    <el-table-column property="medicine" label="Medicine" width="200"></el-table-column>
+                    <el-table-column property="notation" label="Notation" width="200"></el-table-column>
+                    <el-table-column property="vet" label="Veterinarian" width="200"></el-table-column>
+                  </el-table>
+                  <!-- show vaccine record table -->
+                  <h2>Vaccine Record</h2>
+                  <el-table :data="vaccineRec" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
+                    <el-table-column property="givenDate" label="Given Date" width="150"></el-table-column>
+                    <el-table-column property="age" label="Age" width="100"></el-table-column>
+                    <el-table-column property="immunization" label="Immunization" width="200"></el-table-column>
+                    <el-table-column property="vaccine" label="Vaccine" width="200"></el-table-column>
+                    <el-table-column property="dose" label="Dose" width="100"></el-table-column>
+                    <el-table-column property="nextDue" label="Next Due" width="150"></el-table-column>
+                    <el-table-column property="vet" label="Veterinarian" width="200"></el-table-column>
+                  </el-table>
+                </div>
+
+                <!-- input email to send all information !!!!Not Finish!!!!-->
+                <span slot="footer" class="dialog-footer" style="float:middle">
+                  <el-form :model="editPetForm" label-width="40%">
+                  <el-row>
+                    <el-col :span="16">
+                      <el-form-item label="Send to Email:">
+                        <el-input></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                      <!-- send button !!!!Not Finish!!!!-->
+                      <el-button type="info" plain>Send</el-button>
+                    </el-col>
+                  </el-row>
+                </span>
+              </el-dialog>
+            </span>
+            <br>
+          </div>
+          <!-- show all pet information, medical record and vaccine record !!!!Not Finish!!!!-->
+          <el-button type="text" style="margin-left:80%; color:#797D7F;" @click="allPetDialogVisible = true">Watch All</el-button>
+          <el-dialog :visible.sync="allPetDialogVisible" width=70%>
+            <div v-for="listt in listPet">
+              <hr><h2>Pet Information</h2>
+              <el-row>
+                <el-col :span="11">
+                  <p style="font-size:18px">
+                    Pet Name: [[listt.petName]]<br><br>
+                    Date of Birth: [[listt.birthDate]]<br><br>
+                    Breed: [[listt.breed]]
+                  </p>
+                </el-col>
+                <el-col :span="13">
+                  <p style="font-size:18px">
+                    Type: [[listt.type]]<br><br>
+                    Age: [[listt.age]]<br><br>
+                    Sickness: [[listt.sick]]
+                    <!-- edit pet information button -->
+                    <!-- <el-button type="info" plain style="float:right" @click="openEditForm()">Edit</el-button> -->
+                  </p>
+                </el-col>
+              </el-row><hr>
+              <!-- edit button is pressed -->
+              <div v-if="editPetInfo === true">
+                <!-- edit pet information form -->
+                <el-form :model="editPetForm" label-width="15%">
+                  <el-row>
+                    <el-col :span="10">
+                      <el-form-item label="Pet Name" label-width="36%">
+                        <el-input v-model="editPetForm.petName"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="Breed" label-width="42%">
+                        <el-input v-model="editPetForm.breed"></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-form-item label="Date of Birth">
+                    <el-date-picker type="date" v-model="editPetForm.date"
+                    format="dd/MM/yyyy" placeholder="Select date"></el-date-picker>
+                  </el-form-item>
+                </el-form>
+                <!-- delete pet from listPet !!!!Not Finish!!!!-->
+                <el-button type="info" plain style="float:left" @click="deletePet()">Delete</el-button>
+                <el-button type="info" plain style="float:right" @click="editPetInfo = false">Cancel</el-button>
+                <!-- save changes -->
+                <el-button type="info" plain style="float:right" @click="changePetInfo()">Save</el-button>
+                <br><br>
+              </div>
+              <div>
+                <!-- show medical record table -->
+                <h2>Medical Record</h2>
+                <el-table :data="medicalRec" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
+                  <el-table-column property="date" label="Date" width="150"></el-table-column>
+                  <el-table-column property="age" label="Age" width="100"></el-table-column>
+                  <el-table-column property="symptom" label="Symptom" width="200"></el-table-column>
+                  <el-table-column property="medicine" label="Medicine" width="200"></el-table-column>
+                  <el-table-column property="notation" label="Notation" width="200"></el-table-column>
+                  <el-table-column property="vet" label="Veterinarian" width="200"></el-table-column>
+                </el-table>
+                <!-- show vaccine record table -->
+                <h2>Vaccine Record</h2>
+                <el-table :data="vaccineRec" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
+                  <el-table-column property="givenDate" label="Given Date" width="150"></el-table-column>
+                  <el-table-column property="age" label="Age" width="100"></el-table-column>
+                  <el-table-column property="immunization" label="Immunization" width="200"></el-table-column>
+                  <el-table-column property="vaccine" label="Vaccine" width="200"></el-table-column>
+                  <el-table-column property="dose" label="Dose" width="100"></el-table-column>
+                  <el-table-column property="nextDue" label="Next Due" width="150"></el-table-column>
+                  <el-table-column property="vet" label="Veterinarian" width="200"></el-table-column>
+                </el-table>
+              </div>
+            </div>
+            <!-- input email to send all information !!!!Not Finish!!!!-->
+            <span slot="footer" class="dialog-footer" style="float:middle">
+              <el-form :model="editPetForm" label-width="40%">
+              <el-row>
+                <el-col :span="16">
+                  <el-form-item label="Send to Email:">
+                    <el-input></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <!-- send button !!!!Not Finish!!!!-->
+                  <el-button type="info" plain>Send</el-button>
+                </el-col>
+              </el-row>
+            </span>
+          </el-dialog>
+        </div>
+      </div>
+
+      <div class="rightcolumn">
+        <!-- Appointment Table Card -->
+        <div class="cardd" id="appointment">
+          <h2>Appointment</h2>
+          <table style="width:100%">
+            <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Pet</th>
+            <th>Description</th>
+          </tr>
+          <tr v-for="alist in appointmentList">
+            <td>[[alist.date]]</td>
+            <td>[[alist.time]]</td>
+            <td>[[alist.pet]]</td>
+            <td>[[alist.description]]</td>
+          </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js" charset="utf-8"></script>
+    <!-- import Vue before Element -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui"></script>
+    <script src="https://unpkg.com/element-ui/lib/umd/locale/en.js"></script>
+    <script>
+      ELEMENT.locale(ELEMENT.lang.en)
+    </script>
+    <script src="{% static 'userjs.js' %}" charset="utf-8"></script>
+</html>
