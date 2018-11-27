@@ -15,7 +15,7 @@ class queue(models.Model):
 class medical(models.Model):
     pet_name = models.ForeignKey(usermodel, on_delete = models.CASCADE,default=5)
     medical_date = models.CharField(max_length=30,default=5)
-    age = models.CharField(max_length=30,default=5)
+    age = models.CharField(max_length=30,default='-')
     symptom = models.CharField(max_length=255)
     medicine = models.CharField(max_length=255)
     monation = models.CharField(max_length=255)
@@ -24,7 +24,7 @@ class medical(models.Model):
 class vaccine(models.Model):
     pet_name = models.ForeignKey(usermodel, on_delete = models.CASCADE,default=5)
     vaccine_date = models.CharField(max_length=4,default=5)
-    age = models.CharField(max_length=30,default=5)
+    age = models.CharField(max_length=30,default='-')
     immunization = models.CharField(max_length=255)
     vaccine = models.CharField(max_length=255)
     dose = models.CharField(max_length=255)
