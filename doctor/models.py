@@ -19,7 +19,7 @@ class medical(models.Model):
     medicine = models.CharField(max_length=255)
     monation = models.CharField(max_length=255)
     veterinarian = models.CharField(max_length=255)
-    
+
 class vaccine(models.Model):
     pet_name = models.ForeignKey(usermodel, on_delete = models.CASCADE,default=5)
     vaccine_date = models.CharField(max_length=4,default=5)
@@ -33,7 +33,6 @@ class vaccine(models.Model):
 class appointment(models.Model):
     pet_name = models.ForeignKey(usermodel, on_delete = models.CASCADE,default=5)
     next_due =  models.CharField(max_length=255)
+    username = models.CharField(max_length=30,default='')
     time = models.CharField(max_length=4,default=5)
     Description =  models.CharField(max_length=255)
-
-    

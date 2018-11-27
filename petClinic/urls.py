@@ -45,6 +45,6 @@ urlpatterns = [
     path('userInfo/<int:pk>',info_doctor.userInfo),
     path('user/<int:pk>',userViews.fonTest),
     path('doctor/<int:pk>', views_doctor.fonTest),
-    path('staff/<int:pk>', staffViews.fonTest)
-
+    path('staff/<int:pk>', staffViews.fonTest),
+    path('user/editProfile/<int:pk>',userViews.editProfile),
 ]

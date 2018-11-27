@@ -74,7 +74,7 @@ def sendJson(req):
     # jsongen = json.dumps(lst)
     # jsongen  = serializers.serialize('json', objQ)
     # print(jsongen[1])
-   
+
     return JsonResponse(lst, safe=False)
 
 def createVaccine(req):
@@ -82,7 +82,7 @@ def createVaccine(req):
     for i in mypet.objects.all():
         if obj['pet_name'] == i.name:
             objM = i
-            break            
+            break
     db = vaccine(pet_name= i,vaccine_date=obj['vaccine_date'],vaccine_time=obj['vaccine_time'],immunization=obj['immunization'],vaccine=obj['vaccine'],dose=obj['dose'],next_due=obj['next_due'],veterinarian=obj['veterinarian'])
     db.save()
     dbApp = appointment(pet_name=i,next_due=obj['next_due'],time=obj['vaccine_time'],Description=obj['description'])
@@ -100,7 +100,7 @@ def Makeappointment(req):
     for i in mypet.objects.all():
         if obj['pet_name'] == i.name:
             objM = i
-            break            
+            break
     db = appointment(pet_name= i,next_due=obj['next_due'],time = obj['time'],Description=obj['Description'])
     # print(db)
     db.save()
@@ -111,7 +111,7 @@ def createMedical(req):
     for i in mypet.objects.all():
         if obj['pet_name'] == i.name:
             objM = i
-            break       
+            break
     db = medical(pet_name =i,medical_date=obj['medical_date'],symptom=obj['symptom'],medicine=obj['medicine'],monation=obj['monation'],veterinarian=obj['veterinarian'])
     db.save()
     for i in queue.objects.all():
