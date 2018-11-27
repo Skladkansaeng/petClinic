@@ -80,7 +80,7 @@ def sendJson(req):
 def createVaccine(req):
     obj = json.loads(req.body.decode('utf-8'))
     for i in mypet.objects.all():
-        if obj['pet_name'] == i.name:
+        if obj['pet_name'] == i.name and obj['username'] == i.user.username:
             objM = i
             break
     db = vaccine(pet_name= i,vaccine_date=obj['vaccine_date'],vaccine_time=obj['vaccine_time'],immunization=obj['immunization'],vaccine=obj['vaccine'],dose=obj['dose'],next_due=obj['next_due'],veterinarian=obj['veterinarian'],age=i.age)
@@ -89,7 +89,7 @@ def createVaccine(req):
     print(dbApp)
     dbApp.save()
     for i in queue.objects.all():
-        if obj['pet_name'] == i.pet_name.name:
+        if obj['pet_name'] == i.pet_name.name and obj['username'] == i.pet_name.user.username:
             objM = i
             break
     objM.delete()
@@ -110,13 +110,13 @@ def Makeappointment(req):
 def createMedical(req):
     obj = json.loads(req.body.decode('utf-8'))
     for i in mypet.objects.all():
-        if obj['pet_name'] == i.name:
+        if obj['pet_name'] == i.name and i.user.username == obj['username']:
             objM = i
             break
     db = medical(pet_name =i,medical_date=obj['medical_date'],symptom=obj['symptom'],medicine=obj['medicine'],monation=obj['monation'],veterinarian=obj['veterinarian'],age=i.age)
     db.save()
     for i in queue.objects.all():
-        if obj['pet_name'] == i.pet_name.name:
+        if obj['pet_name'] == i.pet_name.name and i.pet_name.user.username == obj['username']:
             objM = i
             break
     objM.delete()

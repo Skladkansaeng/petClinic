@@ -27,7 +27,7 @@ SECRET_KEY = 'xq+u93v(afwsl=t@+6z-95_fr2feaq_(p^abut2sbr^rd1l%8j'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -127,3 +127,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+CSRF_COOKIE_NAME = "csrftoken"
+SESSION_COOKIE_SECURE = True
