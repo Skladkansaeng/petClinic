@@ -23,11 +23,16 @@ def getDataJson(res):
 
 def newPet(res):
     objQ = json.loads(res.body.decode('utf-8'))
-    print(objQ)
+    objUser = user.objects.all()
+    for pn in user.objects.all():
+        if pn.name == "Beam":
+            objUser = pn
+            break
+
     for i in mypet.objects.all():
         if objQ['name'] == i.name and objQ['type'] == i.type:
             return JsonResponse({"res": "cant"},safe=False)
-    save = mypet(user = user.objects.get() ,name= objQ['name'] ,type = objQ['type'],birthDate=parse(objQ['birthDate']),age=objQ['age'],breed=objQ['breed'],sickness=objQ['sickness'])
+    save = mypet(user =  objUser,name= objQ['name'] ,type = objQ['type'],birthDate=parse(objQ['birthDate']),age=objQ['age'],breed=objQ['breed'],sickness=objQ['sickness'])
     save.save()
     return JsonResponse({"res": "can"},safe=False)
 

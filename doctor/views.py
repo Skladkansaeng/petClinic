@@ -5,6 +5,7 @@ import json
 from django.http import JsonResponse
 from doctor.models import queue,vaccine,medical,appointment
 from user.models import mypet
+from createStaff.models import staff
 from django.core import serializers
 
 # from .models import Test
@@ -119,3 +120,9 @@ def createMedical(req):
             break
     objM.delete()
     return JsonResponse({"x": "doctor"})
+
+def fonTest(req,pk):
+    obj = staff.objects.get(pk=pk)
+    context={"name": obj.name,"surname": obj.surname}
+    # context={"name":'d',"surname":'p'}
+    return render(req,'doctor.html',context)

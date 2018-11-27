@@ -24,17 +24,13 @@
       <div class="column middle">
         <div class="card" id="searching">
           <el-autocomplete
-            v-model="state4"
-            :fetch-suggestions="querySearchAsync"
-            placeholder="Search"
-            @select="handleSelect"
-            :hide-loading="true"
-          >
-          <!-- <i
-            class="el-icon-search el-input__icon"
-            slot="suffix">
-          </i> -->
-        </el-autocomplete>
+          class="inline-input"
+          v-model="state2"
+          :fetch-suggestions="querySearch"
+          placeholder="Search User"
+          :trigger-on-focus="false"
+          @select="handleSelect"
+          ></el-autocomplete>
         </div>
         <div class="card" id="newAccount">
           <el-button type="info" plain style="font-size:20px;" @click="dialogAccount = true">Create New Account</el-button>

@@ -24,6 +24,17 @@ new Vue({
                     'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
            }).then(res => {
                    console.log(res.data['status']);
+                   var path = "../"
+                   if (res.data['status'] === 'User') {
+                       path = path+ "user/"+res.data['pk']
+                   }
+                   else if (res.data['status'] === 'Doctor') {
+                        path = path+ "doctor/"+res.data['pk']
+                   }
+                   else if (res.data['status'] === 'Staff') {
+                        path = path+ "staff/"+res.data['pk']
+                   }
+                   window.location.href=path;
                    // window.location.href="../";
            });
 
