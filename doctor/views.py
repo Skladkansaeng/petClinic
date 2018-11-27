@@ -68,7 +68,7 @@ def sendJson(req):
         # d['heartRate']=pn.pet_HeartRate
         # d['dehydration']=pn.pet_Dehydration
         # d['task']=pn.pet_want
-        d = {'petName': pn.pet_name.name,'type':pn.pet_name.type,'age':pn.pet_name.age,'breed':pn.pet_name.breed,'weight':pn.pet_weight,'heartRate':pn.pet_HeartRate,'dehydration':pn.pet_Dehydration,'restRate':pn.pet_restRate,'task':pn.pet_want}
+        d = {'username':pn.pet_name.user.username,'petName': pn.pet_name.name,'type':pn.pet_name.type,'age':pn.pet_name.age,'breed':pn.pet_name.breed,'weight':pn.pet_weight,'heartRate':pn.pet_HeartRate,'dehydration':pn.pet_Dehydration,'restRate':pn.pet_restRate,'task':pn.pet_want}
         lst.append(d)
         # print(lst)
     # jsongen = json.dumps(lst)
@@ -97,11 +97,12 @@ def createVaccine(req):
 
 def Makeappointment(req):
     obj = json.loads(req.body.decode('utf-8'))
+    # print(obj)
     for i in mypet.objects.all():
         if obj['pet_name'] == i.name:
             objM = i
             break
-    db = appointment(pet_name= i,next_due=obj['next_due'],time = obj['time'],Description=obj['Description'])
+    db = appointment(pet_name= i,next_due=obj['next_due'],time = obj['time'],Description=obj['Description'],username = obj['username'])
     # print(db)
     db.save()
     return JsonResponse({"x": "doctor"})
