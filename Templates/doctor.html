@@ -282,6 +282,7 @@
                url: 'getMedical',
                data: {
                     'name':this.listQ[this.selectedIndex].petName,
+                    'username':this.listQ[this.selectedIndex].username,
                },
                xsrfCookieName: 'csrftoken',
                xsrfHeaderName: 'X-CSRFToken',
@@ -298,6 +299,7 @@
                url: 'getVaccine',
                data: {
                     'name':this.listQ[this.selectedIndex].petName,
+                    'username':this.listQ[this.selectedIndex].username,
                },
                xsrfCookieName: 'csrftoken',
                xsrfHeaderName: 'X-CSRFToken',

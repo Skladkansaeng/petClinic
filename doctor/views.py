@@ -21,8 +21,8 @@ def doctor(request):
     # ,{'first_name':test[0].first_name})
 
 def getVaccine(req):
-    objQ =vaccine.objects.all()
     obj = json.loads(req.body.decode('utf-8'))
+    objQ =vaccine.objects.all()
     lst = []
     for pn in objQ:
         # print(pn.pet_name)
@@ -33,14 +33,14 @@ def getVaccine(req):
         # d['heartRate']=pn.pet_HeartRate
         # d['dehydration']=pn.pet_Dehydration
         # d['task']=pn.pet_want
-        if obj['name'] == pn.pet_name.name:
+        if obj['name'] == pn.pet_name.name and pn.pet_name.user.username == obj['username']:
             d = {'givenDate': pn.vaccine_date,'age':pn.pet_name.age,'immunization':pn.immunization,'vaccine':pn.vaccine,'dose':pn.dose,'nextDue':pn.next_due,'vet':pn.veterinarian}
             lst.append(d)
     return JsonResponse(lst, safe=False)
 
 def getMedical(req):
-    objQ =medical.objects.all()
     obj = json.loads(req.body.decode('utf-8'))
+    objQ =medical.objects.all()
     lst = []
     for pn in objQ:
         # print(pn.pet_name)
@@ -51,7 +51,7 @@ def getMedical(req):
         # d['heartRate']=pn.pet_HeartRate
         # d['dehydration']=pn.pet_Dehydration
         # d['task']=pn.pet_want
-        if obj['name'] == pn.pet_name.name:
+        if obj['name'] == pn.pet_name.name and pn.pet_name.user.username == obj['username']:
             d = {'date': pn.medical_date,'age':pn.pet_name.age,'symptom':pn.symptom,'medicine':pn.medicine,'notation':pn.monation,'vet':pn.veterinarian}
             lst.append(d)
     return JsonResponse(lst, safe=False)
