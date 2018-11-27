@@ -24,9 +24,9 @@ def get_userInfo(request):
     lst = []
     findUser = obj['str_input']
     for pn in objUser:
-        if pn.name[:len(findUser)].lower() == findUser :            
-            d={"value": pn.name,"link": "../userInfo"}
-            lst.append(d)
+        if pn.name[:len(findUser)].lower() == findUser :    
+                d={"value": pn.name,"link": pn.pk}
+                lst.append(d)
 
     return JsonResponse(lst, safe=False)
 

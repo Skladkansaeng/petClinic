@@ -260,9 +260,18 @@
     },
     selectedIndex:0
   },
+  created: function() {
+        setInterval(this.getList, 1000);
+},
   methods: {
-    getList: function () {
 
+    getList: function () {
+      axios({
+        method: 'get',
+        url: 'doctorData/',
+      }).then(res => {
+        this.listQ = res.data;
+      });
 
     },
       openDialog(x) {

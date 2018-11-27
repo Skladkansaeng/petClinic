@@ -39,10 +39,10 @@ urlpatterns = [
     path('oak/', staffViews.createUser),
     path('staff/getuserInfor/', staffViews.get_userInfo),
     path('check/', homeViews.checkUser),
-    path('userInfo/',info_doctor.userInfo),
     path('getJason/',info_doctor.getDataJson),
     path('userInfo/newPet/',info_doctor.newPet),
     path('makeQueue/',info_doctor.makeQueue),
+    path('userInfo/<int:pk>',info_doctor.userInfo),
     path('user/<int:pk>',userViews.fonTest),
     path('doctor/<int:pk>', views_doctor.fonTest),
     path('staff/<int:pk>', staffViews.fonTest)

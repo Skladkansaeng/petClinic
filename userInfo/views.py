@@ -6,26 +6,34 @@ import json
 from django.http import JsonResponse
 from doctor.models import queue,vaccine,medical,appointment
 from user.models import mypet,user
+from createStaff.models import staff
 from django.core import serializers
 from dateutil.parser import parse
 # Create your views here.
 
-def userInfo(res):
-    return render(res, 'userInfo.html')
+def userInfo(res,pk):
+    obj = user.objects.get(pk=pk)
+    context={"name": obj.name,"surname": obj.surname,"username": obj.username,"tel":obj.tel,"email":obj.email}
+    return render(res, 'userInfo.html',context)
 
 def getDataJson(res):
-    objQ = mypet.objects.all()    
+  
     lst = []
-    for i in objQ:
-        d = {'petName':i.name,'type':i.type,'birthDate':i.birthDate,'age':i.age,'breed':i.breed,'sick':i.sickness}
-        lst.append(d)
+    obj = json.loads(res.body.decode('utf-8'))
+    # objUser = mypet.objects.filter(user = obj['str_input'])
+ 
+    # print(objUser)
+    for i in mypet.objects.all():
+        if i.user.username == obj['str_input']:
+            d = {'petName':i.name,'type':i.type,'birthDate':i.birthDate,'age':i.age,'breed':i.breed,'sick':i.sickness}
+            lst.append(d)
     return JsonResponse(lst, safe=False)
 
 def newPet(res):
     objQ = json.loads(res.body.decode('utf-8'))
     objUser = user.objects.all()
     for pn in user.objects.all():
-        if pn.name == "Beam":
+        if pn.username == objQ['username']:
             objUser = pn
             break
 

@@ -53,8 +53,8 @@ return this.listQ;
       // ];
     },
     handleSelect(item) {
-      console.log(item);
-      window.location.href = item.link;
+      console.log(item.link);
+      window.location.href = "../userInfo/"+item.link;
       //window.location.href = "userInfo.html";
     }
   },

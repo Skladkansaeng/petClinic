@@ -31,7 +31,7 @@ class vaccine(models.Model):
     veterinarian = models.CharField(max_length=255)
 
 class appointment(models.Model):
-    pet_name = models.OneToOneField(usermodel, on_delete=models.CASCADE, primary_key=True)
+    pet_name = models.ForeignKey(usermodel, on_delete = models.CASCADE,default=5)
     next_due =  models.CharField(max_length=255)
     time = models.CharField(max_length=4,default=5)
     Description =  models.CharField(max_length=255)

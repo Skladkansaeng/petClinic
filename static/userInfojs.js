@@ -1,8 +1,8 @@
 new Vue({
   el:"#userProfile",
   data:{
-    name:'Warisa',
-    surname:'Saisema',
+    name:'{{name}}',
+    surname:'{{surname}}',
     tel:'0806922292',
     email:'wariffon@gmail.com',
     dialogFormVisible:false,
