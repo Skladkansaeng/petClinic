@@ -389,7 +389,7 @@
         //     breed:'unknown',
         //     sick:'-' }
         // ],
-        // listPet:'{{listPet}}',
+        listPet:[],
         selectedIndex:0,
         // show pop-up for each pet information, medical record and vaccine record
         petDialogVisible:false,
@@ -489,6 +489,14 @@
           return str;
         }
       },
+      beforeMount: function () {
+        axios({
+          method: 'get',
+          url: 'userData/{{pk}}',
+        }).then(res => {
+          this.listPet = res.data;
+        });
+      },
       delimiters: ['[[', ']]']
     });
 
@@ -496,17 +504,15 @@
       el:"#appointment",
       // data which showed in appointment table
       data:{
-        appointmentList:[{
-          date:'18/10/2019',
-          time:'10:00',
-          pet:'Memi',
-          description:'check'
-        }, {
-          date:'18/10/2019',
-          time:'14:00',
-          pet:'Huli',
-          description:'check'
-        }]
+        appointmentList:[],
+      },
+      beforeMount: function () {
+        axios({
+          method: 'get',
+          url: 'appData/{{pk}}',
+        }).then(res => {
+          this.appointmentList = res.data;
+        });
       },
       delimiters: ['[[', ']]']
     });
@@ -530,7 +536,6 @@
     //       console.log(res.data)
     //       this.customer=res.data
     //     })
-
     </script>
 
 

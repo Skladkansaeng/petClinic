@@ -47,4 +47,7 @@ urlpatterns = [
     path('doctor/<int:pk>', views_doctor.fonTest),
     path('staff/<int:pk>', staffViews.fonTest),
     path('user/editProfile/<int:pk>',userViews.editProfile),
+    path('user/userData/<int:pk>',userViews.userData),
+    path('user/appData/<int:pk>',userViews.appData),
+
 ]
