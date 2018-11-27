@@ -327,6 +327,7 @@ new Vue({
                method: 'post',
                url: '../makeQueue/',
                data: {
+                 'username':'{{username}}',
                     'pet_name':this.task.petName,
                     'pet_weight':this.task.weight,
                     'pet_heartRate':this.task.heartRate,
@@ -359,6 +360,7 @@ new Vue({
                method: 'post',
                url: '../makeQueue/',
                data: {
+                    'username':'{{username}}',
                     'pet_name':this.task.petName,
                     'pet_weight':this.task.weight,
                     'pet_heartRate':this.task.heartRate,

@@ -38,10 +38,12 @@ def newPet(res):
             break
 
     for i in mypet.objects.all():
-        if objQ['name'] == i.name and objQ['type'] == i.type:
-            return JsonResponse({"res": "cant"},safe=False)
+        if i.user.username == objUser.username:            
+            if objQ['name'] == i.name and objQ['type'] == i.type:
+                return JsonResponse({"res": "cant"},safe=False)
     save = mypet(user =  objUser,name= objQ['name'] ,type = objQ['type'],birthDate=parse(objQ['birthDate']),age=objQ['age'],breed=objQ['breed'],sickness=objQ['sickness'])
     save.save()
+
     return JsonResponse({"res": "can"},safe=False)
 
 def makeQueue(res):
@@ -49,15 +51,16 @@ def makeQueue(res):
     objQ = json.loads(res.body.decode('utf-8'))
     objpet = queue.objects.all()
     for j in objpet:
-        if objQ['pet_name'] == j.pet_name.name:
-            status = False
-            return JsonResponse({"res": "Have"},safe=False)
+        if j.pet_name.user.name == objQ['username']:                
+            if objQ['pet_name'] == j.pet_name.name:
+                status = False
+                return JsonResponse({"res": "Have"},safe=False)
     for i in mypet.objects.all():
-        if objQ['pet_name'] == i.name:
-            petname = i
-            break
+        if i.user.username == objQ['username']: 
+            if objQ['pet_name'] == i.name:
+                petname = i
+                break
     if status:
-        print(objQ)
         save = queue(pet_name=petname,pet_weight=objQ['pet_weight'],pet_HeartRate=objQ['pet_heartRate'],pet_restRate=objQ['pet_restRate'],pet_Dehydration=objQ['pet_Dehydration'],pet_want=objQ['pet_want'],veterinarian=objQ['veterinarian'],description=objQ['description'])
         save.save()
         return JsonResponse({"res": "suc"},safe=False)
