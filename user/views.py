@@ -2,7 +2,9 @@ from django.shortcuts import render
 from user.models import *
 from doctor.models import *
 import json
+import datetime
 from django.http import JsonResponse
+import operator
 # Create your views here.
 def userpage(request):
     return render(request, 'user.html')
@@ -17,6 +19,7 @@ def userData(request,pk):
     return JsonResponse(listPet, safe=False)
 
 def appData(request,pk):
+    date = datetime.datetime.now()
     obj = user.objects.get(pk=pk)
     pet = mypet.objects.filter(user = obj)
     apm = []
@@ -24,8 +27,36 @@ def appData(request,pk):
         app = appointment.objects.filter(pet_name = p)
         for a in app:
             d = {"pet":a.pet_name.name , "date":a.next_due , "time":a.time , "description":a.Description}
-            apm.append(d)
+            if date.year < int(a.next_due[6:]):
+                apm.append(d)
+            elif date.year == int(a.next_due[6:]) and date.month < int(a.next_due[3:5]) :
+                apm.append(d)
+            elif date.year == int(a.next_due[6:]) and date.month == int(a.next_due[3:5]) and date.day <= int(a.next_due[:2]):
+                apm.append(d)
 
+
+
+    for i in range(len(apm)-1,-1,-1):
+        for j in range(i):
+            year1 = apm[j]["date"]
+            year2 = apm[j+1]["date"]
+            if int(year1[:2]) > int(year2[:2]):
+                apm[j],apm[j+1] = apm[j+1],apm[j]
+    print(apm)
+    for i in range(len(apm)-1,-1,-1):
+        for j in range(i):
+            year1 = apm[j]["date"]
+            year2 = apm[j+1]["date"]
+            if int(year1[3:5]) > int(year2[3:5]):
+                apm[j],apm[j+1] = apm[j+1],apm[j]
+    print(apm)
+    for i in range(len(apm)-1,-1,-1):
+        for j in range(i):
+            year1 = apm[j]["date"]
+            year2 = apm[j+1]["date"]
+            if int(year1[6:]) > int(year2[6:]):
+                apm[j],apm[j+1] = apm[j+1],apm[j]
+    print(apm)
     return JsonResponse(apm, safe=False)
 
 def medRecData(request):
