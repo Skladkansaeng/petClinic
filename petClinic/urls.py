@@ -51,7 +51,6 @@ urlpatterns = [
     path('user/appData/<int:pk>',userViews.appData),
     path('user/medRecData/',userViews.medRecData),
     path('user/vacRecData/',userViews.vacRecData),
-    path('userInfo/get_staffInfo/',info_doctor.get_staffInfo),
     path('user/delPet/',userViews.delPet),
 
 
