@@ -353,6 +353,7 @@ new Vue({
   delimiters: ['[[', ']]'],
   data:{
     links: [],
+    listQ:[],
     state2: '',
     listPet:[],
     selectedIndex:0,
@@ -607,15 +608,33 @@ new Vue({
       }
     },
     loadAll(str) {
-      return [
-        { "value": "asetzzz"  },
-        { "value": "vet" },
-        { "value": "lkvetsadasd" },
-        { "value": "hvaf" },
-        { "value": "zvfgsue" },
-        { "value": "uvbnn" },
-        { "value": "zzvue" }
-      ];
+      axios({
+        method: 'push',
+        url: 'get_staffInfo',
+        data: {
+             'str_input':str.toLowerCase(),
+        },
+        xsrfCookieName: 'csrftoken',
+        
+//  xsrfCookieName: '{{ csrf_token }}',
+        xsrfHeaderName: 'X-CSRFToken',
+        headers: {
+                 'X-Requested-With': 'XMLHttpRequest',
+                 'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
+        }).then(res => {
+          console.log(res.data);
+               return this.listQ = res.data;
+        });
+return this.listQ;
+      // return [
+      //   { "value": "asetzzz"  },
+      //   { "value": "vet" },
+      //   { "value": "lkvetsadasd" },
+      //   { "value": "hvaf" },
+      //   { "value": "zvfgsue" },
+      //   { "value": "uvbnn" },
+      //   { "value": "zzvue" }
+      // ];
     },
     selectVet(item) {
       this.taskForm.vet = item.value;

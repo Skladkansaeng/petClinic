@@ -116,28 +116,33 @@
                   <el-button type="info" plain style="float:right" @click="changePetInfo()">Save</el-button>
                   <br><br>
                 </div>
+
                 <div>
                   <!-- show medical record table -->
-                  <h2>Medical Record</h2>
-                  <el-table :data="medicalRec" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
-                    <el-table-column property="date" label="Date" width="150"></el-table-column>
-                    <el-table-column property="age" label="Age" width="100"></el-table-column>
-                    <el-table-column property="symptom" label="Symptom" width="200"></el-table-column>
-                    <el-table-column property="medicine" label="Medicine" width="200"></el-table-column>
-                    <el-table-column property="notation" label="Notation" width="200"></el-table-column>
-                    <el-table-column property="vet" label="Veterinarian" width="200"></el-table-column>
-                  </el-table>
+                  <div v-if="showMed === true">
+                    <h2>Medical Record</h2>
+                    <el-table :data="medicalRec" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
+                      <el-table-column property="date" label="Date" width="150"></el-table-column>
+                      <el-table-column property="age" label="Age" width="100"></el-table-column>
+                      <el-table-column property="symptom" label="Symptom" width="200"></el-table-column>
+                      <el-table-column property="medicine" label="Medicine" width="200"></el-table-column>
+                      <el-table-column property="notation" label="Notation" width="200"></el-table-column>
+                      <el-table-column property="vet" label="Veterinarian" width="200"></el-table-column>
+                    </el-table>
+                  </div>
                   <!-- show vaccine record table -->
-                  <h2>Vaccine Record</h2>
-                  <el-table :data="vaccineRec" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
-                    <el-table-column property="givenDate" label="Given Date" width="150"></el-table-column>
-                    <el-table-column property="age" label="Age" width="100"></el-table-column>
-                    <el-table-column property="immunization" label="Immunization" width="200"></el-table-column>
-                    <el-table-column property="vaccine" label="Vaccine" width="200"></el-table-column>
-                    <el-table-column property="dose" label="Dose" width="100"></el-table-column>
-                    <el-table-column property="nextDue" label="Next Due" width="150"></el-table-column>
-                    <el-table-column property="vet" label="Veterinarian" width="200"></el-table-column>
-                  </el-table>
+                  <div v-if="showVac === true">
+                    <h2>Vaccine Record</h2>
+                    <el-table :data="vaccineRec" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
+                      <el-table-column property="givenDate" label="Given Date" width="150"></el-table-column>
+                      <el-table-column property="age" label="Age" width="100"></el-table-column>
+                      <el-table-column property="immunization" label="Immunization" width="200"></el-table-column>
+                      <el-table-column property="vaccine" label="Vaccine" width="200"></el-table-column>
+                      <el-table-column property="dose" label="Dose" width="100"></el-table-column>
+                      <el-table-column property="nextDue" label="Next Due" width="150"></el-table-column>
+                      <el-table-column property="vet" label="Veterinarian" width="200"></el-table-column>
+                    </el-table>
+                  </div>
                 </div>
 
                 <!-- input email to send all information !!!!Not Finish!!!!-->
@@ -185,26 +190,30 @@
 
               <div>
                 <!-- show medical record table -->
-                <h2>Medical Record</h2>
-                <el-table :data="medicalRec" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
-                  <el-table-column property="date" label="Date" width="150"></el-table-column>
-                  <el-table-column property="age" label="Age" width="100"></el-table-column>
-                  <el-table-column property="symptom" label="Symptom" width="200"></el-table-column>
-                  <el-table-column property="medicine" label="Medicine" width="200"></el-table-column>
-                  <el-table-column property="notation" label="Notation" width="200"></el-table-column>
-                  <el-table-column property="vet" label="Veterinarian" width="200"></el-table-column>
-                </el-table>
+                <div v-if="checkshowMed(listt)===true">
+                  <h2>Medical Record</h2>
+                  <el-table :data="medAll[listPet.indexOf(listt)]" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
+                    <el-table-column property="date" label="Date" width="150"></el-table-column>
+                    <el-table-column property="age" label="Age" width="100"></el-table-column>
+                    <el-table-column property="symptom" label="Symptom" width="200"></el-table-column>
+                    <el-table-column property="medicine" label="Medicine" width="200"></el-table-column>
+                    <el-table-column property="notation" label="Notation" width="200"></el-table-column>
+                    <el-table-column property="vet" label="Veterinarian" width="200"></el-table-column>
+                  </el-table>
+                </div>
                 <!-- show vaccine record table -->
-                <h2>Vaccine Record</h2>
-                <el-table :data="vaccineRec" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
-                  <el-table-column property="givenDate" label="Given Date" width="150"></el-table-column>
-                  <el-table-column property="age" label="Age" width="100"></el-table-column>
-                  <el-table-column property="immunization" label="Immunization" width="200"></el-table-column>
-                  <el-table-column property="vaccine" label="Vaccine" width="200"></el-table-column>
-                  <el-table-column property="dose" label="Dose" width="100"></el-table-column>
-                  <el-table-column property="nextDue" label="Next Due" width="150"></el-table-column>
-                  <el-table-column property="vet" label="Veterinarian" width="200"></el-table-column>
-                </el-table>
+                <div v-if="checkshowVac(listt)===true">
+                  <h2>Vaccine Record</h2>
+                  <el-table :data="vacAll[listPet.indexOf(listt)]" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
+                    <el-table-column property="givenDate" label="Given Date" width="150"></el-table-column>
+                    <el-table-column property="age" label="Age" width="100"></el-table-column>
+                    <el-table-column property="immunization" label="Immunization" width="200"></el-table-column>
+                    <el-table-column property="vaccine" label="Vaccine" width="200"></el-table-column>
+                    <el-table-column property="dose" label="Dose" width="100"></el-table-column>
+                    <el-table-column property="nextDue" label="Next Due" width="150"></el-table-column>
+                    <el-table-column property="vet" label="Veterinarian" width="200"></el-table-column>
+                  </el-table>
+                </div>
               </div>
             </div>
 
@@ -393,7 +402,11 @@
           dose:'',
           nextDue:'',
           vet:''
-        }]
+        }],
+        showMed:false,
+        showVac:false,
+        medAll:[],
+        vacAll:[]
       },
       methods:{
         openPetDialog(x) {
@@ -412,6 +425,21 @@
           console.log(this.selectedIndex,this.listPet[this.selectedIndex].petName);
           // this.listPet.pop(this.selectedIndex);
           // document.getElementById("petList").reload(true); // maybe work with front-back
+          axios({
+               method: 'post',
+               url: 'delPet/',
+               data: {
+                    'pk':'{{pk}}',
+                    'petName': this.listPet[this.selectedIndex].petName
+               },
+               xsrfCookieName: 'csrftoken',
+               xsrfHeaderName: 'X-CSRFToken',
+               headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
+               }).then(res => {
+                 window.location.reload();
+               });
           this.editPetInfo = false;
           this.petDialogVisible = false;
           // show meg
@@ -458,9 +486,27 @@
                         'X-Requested-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
                }).then(res => {
-                       console.log('derf');
-                       this.medicalRec = res.data;
+                   // this.medicalRec = res.data[this.selectedIndex];
+                   // console.log(res.data[this.selectedIndex].length);
+                   this.medicalRec=[];
+                   var i=0;
+                   for (i;i<res.data[this.selectedIndex].length;i++) {
+                     var obj ={
+                       date:res.data[this.selectedIndex][i]['date'],
+                       age:res.data[this.selectedIndex][i]['age'],
+                       symptom:res.data[this.selectedIndex][i]['symptom'],
+                       medicine:res.data[this.selectedIndex][i]['medicine'],
+                       notation:res.data[this.selectedIndex][i]['notation'],
+                       vet:res.data[this.selectedIndex][i]['vet']
+                     }
+                     // console.log(i,res.data[this.selectedIndex][i]['date']);
+                     // console.log(obj);
+                     this.medicalRec.push(obj);
+                   }
+                   if (this.medicalRec.length===0) this.showMed = false;
+                   else this.showMed = true;
                });
+
            axios({
                 method: 'post',
                 url: 'vacRecData/',
@@ -473,9 +519,35 @@
                          'X-Requested-With': 'XMLHttpRequest',
                          'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
                 }).then(res => {
-                        console.log('derf');
-                        this.vaccineRec = res.data;
+                  this.vaccineRec=[];
+                  var i=0;
+                  for (i;i<res.data[this.selectedIndex].length;i++) {
+                    var obj ={
+                      givenDate:res.data[this.selectedIndex][i]['givenDate'],
+                      age:res.data[this.selectedIndex][i]['age'],
+                      immunization:res.data[this.selectedIndex][i]['immunization'],
+                      vaccine:res.data[this.selectedIndex][i]['vaccine'],
+                      dose:res.data[this.selectedIndex][i]['dose'],
+                      nextDue:res.data[this.selectedIndex][i]['nextDue'],
+                      vet:res.data[this.selectedIndex][i]['vet']
+                    }
+                    // console.log(i,res.data[this.selectedIndex][i]['date']);
+                    // console.log(obj);
+                    this.vaccineRec.push(obj);
+                  }
+                  if (this.vaccineRec.length===0) this.showVac = false;
+                  else this.showVac = true;
                 });
+        },
+        checkshowMed(pet){
+          // console.log(this.medAll[this.listPet.indexOf(pet)].length);
+          if (this.medAll[this.listPet.indexOf(pet)].length===0) return false;
+          else return true;
+        },
+        checkshowVac(pet){
+          // console.log(this.vacAll[this.listPet.indexOf(pet)].length);
+          if (this.vacAll[this.listPet.indexOf(pet)].length===0) return false;
+          else return true;
         }
       },
       beforeMount: function () {
@@ -485,6 +557,36 @@
         }).then(res => {
           this.listPet = res.data;
         });
+
+        axios({
+             method: 'post',
+             url: 'medRecData/',
+             data: {
+                  'pk':'{{pk}}',
+             },
+             xsrfCookieName: 'csrftoken',
+             xsrfHeaderName: 'X-CSRFToken',
+             headers: {
+                      'X-Requested-With': 'XMLHttpRequest',
+                      'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
+             }).then(res => {
+               this.medAll = res.data;
+             });
+
+       axios({
+            method: 'post',
+            url: 'vacRecData/',
+            data: {
+                 'pk':'{{pk}}',
+            },
+            xsrfCookieName: 'csrftoken',
+            xsrfHeaderName: 'X-CSRFToken',
+            headers: {
+                     'X-Requested-With': 'XMLHttpRequest',
+                     'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
+            }).then(res => {
+              this.vacAll = res.data;
+            });
       },
 
       delimiters: ['[[', ']]']

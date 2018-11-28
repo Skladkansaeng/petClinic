@@ -20,12 +20,12 @@ def createUser(request):
 def get_userInfo(request):
     objUser = user.objects.all()
     obj = json.loads(request.body.decode('utf-8'))
-    print(obj)
+#     print(obj)
     lst = []
     findUser = obj['str_input']
     for pn in objUser:
         if pn.name[:len(findUser)].lower() == findUser :    
-                d={"value": pn.name,"link": pn.pk}
+                d={"value": pn.name+ " "+ pn.surname,"link": pn.pk}
                 lst.append(d)
 
     return JsonResponse(lst, safe=False)

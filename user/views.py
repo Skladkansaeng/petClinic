@@ -40,6 +40,7 @@ def medRecData(request):
             d = {"date":r.medical_date , "age":r.age , "symptom":r.symptom , "medicine":r.medicine , "notation":r.monation , "vet":r.veterinarian }
             mpet.append(d)
         medRec.append(mpet)
+    # print("Medical----->",medRec,"\n")
 
     return JsonResponse(medRec, safe=False)
 
@@ -55,8 +56,15 @@ def vacRecData(request):
             d = {"givenDate":r.vaccine_date , "age":r.age , "immunization":r.immunization , "vaccine":r.vaccine , "dose":r.dose , "nextDue":r.next_due , "vet":r.veterinarian }
             mpet.append(d)
         medRec.append(mpet)
-    
+    # print("Vaccine----->",medRec,"\n")
     return JsonResponse(medRec, safe=False)
+
+def delPet(req):
+    data = json.loads(req.body.decode('utf-8'))
+    obj = user.objects.get(pk=data['pk'])
+    pet = mypet.objects.get(user = obj,name = data['petName'])
+    pet.delete()
+    return JsonResponse({'sts':'complete'})
 
 
 def fonTest(req,pk):
