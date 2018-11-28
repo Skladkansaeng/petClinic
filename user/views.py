@@ -2,6 +2,7 @@ from django.shortcuts import render
 from user.models import *
 from doctor.models import *
 import json
+import base64
 import datetime
 from django.http import JsonResponse
 import operator
@@ -96,6 +97,12 @@ def delPet(req):
 
 
 def fonTest(req,pk):
+    print('fontest',pk)
+    pk = pk.encode()
+    decoded_data = base64.b64decode(pk)
+    print(decoded_data)
+    pk = decoded_data.decode()
+    print(pk)
     obj = user.objects.get(pk=pk)
     # app = appointment.objects.get(pet_name = obj.)
     context={"name": obj.name,"surname": obj.surname,"email":obj.email,"tel":obj.tel,"pk":pk}
