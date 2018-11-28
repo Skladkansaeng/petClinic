@@ -49,5 +49,9 @@ urlpatterns = [
     path('user/editProfile/<int:pk>',userViews.editProfile),
     path('user/userData/<int:pk>',userViews.userData),
     path('user/appData/<int:pk>',userViews.appData),
+    path('user/medRecData/',userViews.medRecData),
+    path('user/vacRecData/',userViews.vacRecData),
+
+
 
 ]

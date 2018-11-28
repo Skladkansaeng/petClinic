@@ -25,8 +25,38 @@ def appData(request,pk):
         for a in app:
             d = {"pet":a.pet_name.name , "date":a.next_due , "time":a.time , "description":a.Description}
             apm.append(d)
-    print(apm)
+
     return JsonResponse(apm, safe=False)
+
+def medRecData(request):
+    pk = json.loads(request.body.decode('utf-8'))
+    obj = user.objects.get(pk=pk['pk'])
+    pet = mypet.objects.filter(user = obj)
+    medRec = []
+    for p in pet:
+        mpet = []
+        meds = medical.objects.filter(pet_name = p)
+        for r in meds:
+            d = {"date":r.medical_date , "age":r.age , "symptom":r.symptom , "medicine":r.medicine , "notation":r.monation , "vet":r.veterinarian }
+            mpet.append(d)
+        medRec.append(mpet)
+
+    return JsonResponse(medRec, safe=False)
+
+def vacRecData(request):
+    pk = json.loads(request.body.decode('utf-8'))
+    obj = user.objects.get(pk=pk['pk'])
+    pet = mypet.objects.filter(user = obj)
+    medRec = []
+    for p in pet:
+        mpet = []
+        meds = vaccine.objects.filter(pet_name = p)
+        for r in meds:
+            d = {"givenDate":r.vaccine_date , "age":r.age , "immunization":r.immunization , "vaccine":r.vaccine , "dose":r.dose , "nextDue":r.next_due , "vet":r.veterinarian }
+            mpet.append(d)
+        medRec.append(mpet)
+    
+    return JsonResponse(medRec, safe=False)
 
 
 def fonTest(req,pk):

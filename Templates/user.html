@@ -430,6 +430,7 @@
           this.editPetInfo = false;
           // x is obj to find which index of pet is selected
           this.selectedIndex = this.listPet.indexOf(x);
+          this.getMedicalRecord(this.listPet[this.selectedIndex]);
         },
         openEditForm() {
           this.editPetInfo = !this.editPetInfo;
@@ -487,6 +488,38 @@
             else str = year+'y'+month+'m';
           }
           return str;
+        },
+        getMedicalRecord(pet) {
+          axios({
+               method: 'post',
+               url: 'medRecData/',
+               data: {
+                    'pk':'{{pk}}',
+               },
+               xsrfCookieName: 'csrftoken',
+               xsrfHeaderName: 'X-CSRFToken',
+               headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
+               }).then(res => {
+                       console.log('derf');
+                       this.medicalRec = res.data;
+               });
+           axios({
+                method: 'post',
+                url: 'vacRecData/',
+                data: {
+                     'pk':'{{pk}}',
+                },
+                xsrfCookieName: 'csrftoken',
+                xsrfHeaderName: 'X-CSRFToken',
+                headers: {
+                         'X-Requested-With': 'XMLHttpRequest',
+                         'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
+                }).then(res => {
+                        console.log('derf');
+                        this.vaccineRec = res.data;
+                });
         }
       },
       beforeMount: function () {
@@ -496,7 +529,12 @@
         }).then(res => {
           this.listPet = res.data;
         });
+
+
+
+
       },
+
       delimiters: ['[[', ']]']
     });
 
