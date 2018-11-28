@@ -3,7 +3,8 @@ import datetime
 from user.models import mypet as usermodel
 # Create your models here.
 class queue(models.Model):
-    pet_name = models.OneToOneField(usermodel, on_delete=models.CASCADE, primary_key=True )
+    # pet_name = models.OneToOneField(usermodel, on_delete=models.CASCADE, primary_key=True )
+    pet_name = models.ForeignKey(usermodel ,on_delete = models.CASCADE,default=5)
     pet_weight  = models.CharField(max_length=255, default='')
     pet_HeartRate = models.CharField(max_length=30, default='')
     pet_restRate =models.CharField(max_length=30, default='')

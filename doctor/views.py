@@ -62,7 +62,7 @@ def sendJson(req):
     obj = json.loads(req.body.decode('utf-8'))
     print(obj['username'])
     lst = []
-    # for pn in objQ:
+    for pn in objQ:
         # print(pn.pet_name)
         # d = {}
         # d['petName']=pn.pet_name.name
@@ -71,13 +71,14 @@ def sendJson(req):
         # d['heartRate']=pn.pet_HeartRate
         # d['dehydration']=pn.pet_Dehydration
         # d['task']=pn.pet_want
-        # d = {'username':pn.pet_name.user.username,'petName': pn.pet_name.name,'type':pn.pet_name.type,'age':pn.pet_name.age,'breed':pn.pet_name.breed,'weight':pn.pet_weight,'heartRate':pn.pet_HeartRate,'dehydration':pn.pet_Dehydration,'restRate':pn.pet_restRate,'task':pn.pet_want}
-        # lst.append(d)
-        # print(lst)
-    for i in range(len(objQ)-1,-1,-1):
-        if objQ[i].veterinarian == obj['username']:
-            d = {'username':objQ[i].pet_name.user.username,'petName': objQ[i].pet_name.name,'type':objQ[i].pet_name.type,'age':objQ[i].pet_name.age,'breed':objQ[i].pet_name.breed,'weight':objQ[i].pet_weight,'heartRate':objQ[i].pet_HeartRate,'dehydration':objQ[i].pet_Dehydration,'restRate':objQ[i].pet_restRate,'task':objQ[i].pet_want}
+         if pn.veterinarian == obj['username']:
+            d = {'username':pn.pet_name.user.username,'petName': pn.pet_name.name,'type':pn.pet_name.type,'age':pn.pet_name.age,'breed':pn.pet_name.breed,'weight':pn.pet_weight,'heartRate':pn.pet_HeartRate,'dehydration':pn.pet_Dehydration,'restRate':pn.pet_restRate,'task':pn.pet_want}
             lst.append(d)
+        # print(lst)
+    # for i in range(len(objQ)-1,-1,-1):
+        # if objQ[i].veterinarian == obj['username']:
+    #         d = {'username':objQ[i].pet_name.user.username,'petName': objQ[i].pet_name.name,'type':objQ[i].pet_name.type,'age':objQ[i].pet_name.age,'breed':objQ[i].pet_name.breed,'weight':objQ[i].pet_weight,'heartRate':objQ[i].pet_HeartRate,'dehydration':objQ[i].pet_Dehydration,'restRate':objQ[i].pet_restRate,'task':objQ[i].pet_want}
+    #         lst.append(d)
     # jsongen = json.dumps(lst)
     # jsongen  = serializers.serialize('json', objQ)
     # print(jsongen[1])

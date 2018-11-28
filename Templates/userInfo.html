@@ -493,14 +493,14 @@ new Vue({
                         'X-Requested-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
                }).then(res => {
-                      //if(res.data.res == 'suc')  window.location.href="";
-                      //else{
-                      //  this.$message({
-                      //message: 'You has Queue',
-                      //type: 'success',
-                      //center: true
-                      //});
-                   //}
+                if(res.data.res == 'suc')  ;
+                  else{
+                     this.$message({
+                     message: 'You has Queue',
+                     type: 'error',
+                     center: true
+                     });
+                   }
                });
             } else {
               axios({
@@ -523,14 +523,14 @@ new Vue({
                         'X-Requested-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
                }).then(res => {
-                //if(res.data.res == 'suc')  window.location.href="";
-                //   else{
-                //      this.$message({
-                //      message: 'You has Queue',
-                //      type: 'success',
-                //      center: true
-                //      });
-                //    }
+                if(res.data.res == 'suc')  ;
+                  else{
+                     this.$message({
+                     message: 'You has Queue',
+                     type: 'error',
+                     center: true
+                     });
+                   }
                });
             }
 
