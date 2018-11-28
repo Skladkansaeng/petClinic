@@ -311,11 +311,19 @@
 
     getList: function () {
       axios({
-        method: 'get',
-        url: 'doctorData/',
-      }).then(res => {
-        this.listQ = res.data;
-      });
+                         method: 'push',
+                         url: 'doctorData/',
+                         data: {
+                              'username':'{{name}}' +" "+'{{surname}}'                          
+                         },
+                         xsrfCookieName: 'csrftoken',
+                         xsrfHeaderName: 'X-CSRFToken',
+                         headers: {
+                                  'X-Requested-With': 'XMLHttpRequest',
+                                  'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
+                         }).then(res => {
+                          this.listQ = res.data;
+                         });
 
     },
       openDialog(x) {
@@ -515,12 +523,27 @@
       }
     },
       beforeMount: function () {
-      axios({
-        method: 'get',
-        url: 'doctorData/',
-      }).then(res => {
-        this.listQ = res.data;
-      });
+      // axios({
+      //   method: 'get',
+      //   url: 'doctorData/',
+      // }).then(res => {
+      //   this.listQ = res.data;
+      // });
+
+                         axios({
+                         method: 'push',
+                         url: 'doctorData/',
+                         data: {
+                          'username':'{{name}}' +" "+'{{surname}}'                          
+                         },
+                         xsrfCookieName: 'csrftoken',
+                         xsrfHeaderName: 'X-CSRFToken',
+                         headers: {
+                                  'X-Requested-With': 'XMLHttpRequest',
+                                  'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
+                         }).then(res => {
+                          this.listQ = res.data;
+                         });
     }
 
 });
