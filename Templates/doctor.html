@@ -377,10 +377,16 @@
                   if (valid) {
                     this.appointment = false;
                     var date = new Date(this.appointmentForm.date);
+                    var today = new Date();
                     axios({
                          method: 'push',
                          url: '../Makeappointment',
                          data: {
+                           'medical_date':today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear(),
+                          'symptom':this.medicalForm.symptom,
+                          'medicine':this.medicalForm.medicine,
+                          'monation':this.medicalForm.notation,
+                          'veterinarian':this.firstName +' ' + this.lastName,                    
                               'pet_name':this.listQ[this.selectedIndex].petName,
                               'next_due':date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear(),
                               'time':this.appointmentForm.time,
@@ -421,7 +427,7 @@
                      method: 'post',
                      url: '../createMedical',
                      data: {
-                      'username':this.listQ[this.selectedIndex].username,
+                          'username':this.listQ[this.selectedIndex].username,
                           'pet_name':this.listQ[this.selectedIndex].petName,
                           'medical_date':today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear(),
                           'symptom':this.medicalForm.symptom,
@@ -466,7 +472,7 @@
                    method: 'post',
                    url: '../createVaccine',
                    data: {
-                    'username':this.listQ[this.selectedIndex].username,
+                        'username':this.listQ[this.selectedIndex].username,
                         'pet_name':this.listQ[this.selectedIndex].petName,
                         'vaccine_date':today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear(),
                         'immunization':this.vaccineForm.immunization,

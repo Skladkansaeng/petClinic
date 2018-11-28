@@ -107,13 +107,19 @@ def Makeappointment(req):
     obj = json.loads(req.body.decode('utf-8'))
     # print(obj)
     for i in mypet.objects.all():
+        if obj['pet_name'] == i.name and i.user.username == obj['username']:
+            objM = i
+            break
+    db = medical(pet_name =i,medical_date=obj['medical_date'],symptom=obj['symptom'],medicine=obj['medicine'],monation=obj['monation'],veterinarian=obj['veterinarian'],age=i.age)
+    db.save()
+    for i in mypet.objects.all():
         if obj['pet_name'] == i.name:
             objM = i
             break
     db = appointment(pet_name= i,next_due=obj['next_due'],time = obj['time'],Description=obj['Description'],username = obj['username'])
     # print(db)
     for i in queue.objects.all():
-        if obj['pet_name'] == i.name and obj['username'] == i.user.username:
+        if obj['pet_name'] == i.pet_name.name and obj['username'] == i.pet_name.user.username:
             objM = i
             break
     objM.delete()
