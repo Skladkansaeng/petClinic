@@ -20,7 +20,7 @@ def createUser(request):
 def get_userInfo(request):
     objUser = user.objects.all()
     obj = json.loads(request.body.decode('utf-8'))
-#     print(objUser)
+    print(obj)
     lst = []
     findUser = obj['str_input']
     for pn in objUser:

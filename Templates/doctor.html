@@ -1,4 +1,5 @@
 {% load static %}
+{% csrf_token %}
 <!DOCTYPE html>
 <html>
 
@@ -261,7 +262,7 @@
     selectedIndex:0
   },
   created: function() {
-        setInterval(this.getList, 1000);
+        setInterval(this.getList, 5000);
 },
   methods: {
 
@@ -282,6 +283,7 @@
                url: 'getMedical',
                data: {
                     'name':this.listQ[this.selectedIndex].petName,
+                    'username':this.listQ[this.selectedIndex].username,
                },
                xsrfCookieName: 'csrftoken',
                xsrfHeaderName: 'X-CSRFToken',
@@ -298,6 +300,7 @@
                url: 'getVaccine',
                data: {
                     'name':this.listQ[this.selectedIndex].petName,
+                    'username':this.listQ[this.selectedIndex].username,
                },
                xsrfCookieName: 'csrftoken',
                xsrfHeaderName: 'X-CSRFToken',
@@ -356,6 +359,7 @@
                method: 'post',
                url: 'createMedical',
                data: {
+                'username':this.listQ[this.selectedIndex].username,
                     'pet_name':this.listQ[this.selectedIndex].petName,
                     'medical_date':today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear(),
                     'symptom':this.medicalForm.symptom,
@@ -389,6 +393,7 @@
                method: 'post',
                url: 'createVaccine',
                data: {
+                'username':this.listQ[this.selectedIndex].username,
                     'pet_name':this.listQ[this.selectedIndex].petName,
                     'vaccine_date':today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear(),
                     'immunization':this.vaccineForm.immunization,
