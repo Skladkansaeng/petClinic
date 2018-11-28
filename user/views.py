@@ -33,9 +33,6 @@ def appData(request,pk):
                 apm.append(d)
             elif date.year == int(a.next_due[6:]) and date.month == int(a.next_due[3:5]) and date.day <= int(a.next_due[:2]):
                 apm.append(d)
-
-
-
     for i in range(len(apm)-1,-1,-1):
         for j in range(i):
             year1 = apm[j]["date"]
