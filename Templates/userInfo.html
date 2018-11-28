@@ -307,7 +307,7 @@
                   <el-form-item label="Date of Birth"
                   prop="birthDate"
                   :rules="rules.date">
-                    <el-date-picker type="date" v-model="newPet.birthDate"
+                    <el-date-picker type="date" v-model="newPet.birthDate" :picker-options="noNeedFuture"
                     format="dd/MM/yyyy" placeholder="Select date"></el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -354,6 +354,11 @@ new Vue({
   el:"#petList",
   delimiters: ['[[', ']]'],
   data:{
+    noNeedFuture:{
+      disabledDate(future){
+        return future.getTime() > Date.now();
+      }
+    },
     links: [],
     listQ:[],
     state2: '',
