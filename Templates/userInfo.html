@@ -77,7 +77,7 @@
                     <el-form-item label="Breed"
                     prop="breed"
                     label-width="30%"
-                    :rules="rules.alphaStr">
+                    :rules="rules.alphaStr2">
                       <el-input v-model="taskForm.breed" maxlength="30" clearable></el-input>
                     </el-form-item>
                   </el-col>
@@ -112,7 +112,9 @@
                 </el-row>
                 <el-row>
                   <el-col :span="10">
-                    <el-form-item label="Dehydration" label-width="30%"  >
+                    <el-form-item label="Dehydration" label-width="30%"
+                    prop="dehydration"
+                    :rules="rules.selectReq">
                       <el-radio-group v-model="taskForm.dehydration" fill="#909497">
                         <el-radio-button label="Yes"></el-radio-button>
                         <el-radio-button label="No"></el-radio-button>
@@ -123,7 +125,7 @@
                 <div><br></div>
                 <el-row>
                   <el-col :span="10">
-                    <el-form-item label="Vet" label-width="30%"  >
+                    <el-form-item label="Vet" label-width="30%" prop="vet" :rules="rules.selectReq">
                       <el-autocomplete
                       class="inline-input"
                       v-model="state2"
@@ -135,7 +137,7 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="10">
-                    <el-form-item label="Task" label-width="30%"  >
+                    <el-form-item label="Task" label-width="30%"  prop="service" :rules="rules.selectReq">
                       <el-radio-group v-model="taskForm.service" fill="#909497">
                         <el-radio-button label="Medical"></el-radio-button>
                         <el-radio-button label="Vaccine"></el-radio-button>
@@ -144,7 +146,7 @@
                   </el-col>
                 </el-row>
                 <el-row>
-                  <el-form-item label="Description" label-width="12%">
+                  <el-form-item label="Description" label-width="12%" prop="description">
                     <el-input type="textarea"
                     :autosize="{ minRows: 2, maxRows: 4}"
                     v-model="taskForm.description"></el-input>
@@ -269,14 +271,14 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="Pet Name"
-                  label-width="25%" 
+                  label-width="25%"
                   prop="petName"
                   :rules="rules.alphaStr">
                     <el-input v-model="newPet.petName" maxlength="30" clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="Type" prop="type"  >
+                  <el-form-item label="Type" prop="type" :rules="rules.selectReq">
                     <el-radio-group v-model="newPet.type" fill="#909497">
                       <el-radio-button label="Dog"></el-radio-button>
                       <el-radio-button label="Cat"></el-radio-button>
@@ -288,14 +290,14 @@
                 <el-col :span="12">
                   <el-form-item label="Breed"
                   prop="breed"
-                  :rules="rules.alphaStr">
+                  :rules="rules.alphaStr2">
                     <el-input v-model="newPet.breed" maxlength="30" clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12" style="float:left;">
                   <el-form-item label="Sickness"
                   prop="sick"
-                  :rules="rules.alphaStr">
+                  :rules="rules.alphaStr2">
                     <el-input v-model="newPet.sick" maxlength="30" clearable></el-input>
                   </el-form-item>
                 </el-col>
@@ -369,14 +371,14 @@ new Vue({
       weight:'',
       heartRate:'',
       restRate:'',
-      dehydration:'No',
-      service:'Medical',
+      dehydration:'',
+      service:'',
       description:'',
       vet:''
     },
     newPet:{
       petName:'',
-      type:'Dog',
+      type:'',
       birthDate:'',
       age:'',
       breed:'',
@@ -387,6 +389,14 @@ new Vue({
         { required: true, message: 'Please Input Information', trigger: 'change' },
         { min: 1, max: 30, message: 'Length should be 1 to 30', trigger: 'change' },
         { pattern: '^[A-Za-z]+$', message: 'Input must be a Letters', trigger: 'change' }
+      ],
+      alphaStr2: [
+        { required: true, message: 'Please Input Information', trigger: 'change' },
+        { min: 1, max: 30, message: 'Length should be 1 to 30', trigger: 'change' },
+        { pattern: '^[A-Za-z.-]+$', message: 'Input must be a Letters or -', trigger: 'change' }
+      ],
+      selectReq: [
+        { required: true, message: 'Please Input Information', trigger: 'change' },
       ],
       numberStr: [
         { required: true, message: 'Please Input Information', trigger: 'change' },
@@ -428,8 +438,8 @@ new Vue({
       this.taskForm.restRate='';
       this.taskForm.description ='';
       this.taskForm.vet ='';
-      this.taskForm.dehydration='No';
-      this.taskForm.service='Medical';
+      this.taskForm.dehydration='';
+      this.taskForm.service='';
       this.state2='';
 
       // this.editTaskInfo = false;
@@ -592,7 +602,7 @@ new Vue({
     discardNewPet(){
       this.openAddPetDialog=false;
       this.newPet.petName = '';
-      this.newPet.type = 'Dog';
+      this.newPet.type = '';
       this.newPet.breed = '';
       this.newPet.sick = '';
       this.newPet.birthDate = '';
