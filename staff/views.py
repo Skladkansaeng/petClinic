@@ -3,17 +3,24 @@ import json
 from django.http import JsonResponse
 from user.models import user
 from createStaff.models import staff
-
+import uuid
+import hashlib
 # # Create your views here.
 # def staff(request):
 #     return render(request, 'staff.html')
+def hash_password(password):
+    # uuid is used to generate a random number
+    salt = uuid.uuid4().hex
+    return hashlib.sha256(salt.encode() + password.encode()).hexdigest() + ':' + salt
+
 
 def createUser(request):
     print('test')
     obj = json.loads(request.body.decode('utf-8'))
     print(obj)
+    password_hash = hash_password(obj['password'])
     db = user(name = obj['firstname'] , surname = obj['lastname'] , tel =obj['tel'] ,
-    email= obj['email'] , username= obj['username'], password= obj['password'] )
+    email= obj['email'] , username= obj['username'], password= password_hash)
     db.save()
     return JsonResponse({"w": "wr"})
 
