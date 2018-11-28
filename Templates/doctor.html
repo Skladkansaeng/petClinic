@@ -28,7 +28,7 @@
         <div class="column middle" id="queue">
           <div class="card" style="text-align:center">
             <!-- show name Vet -->
-            <h3>DR. [[firstName]] [[lastName]]</h3>
+            <h3>Dr. {{name}} {{surname}}</h3>
           </div>
           <div class="card">
             <h2>To Do</h2>
@@ -70,7 +70,7 @@
                   </el-col>
                 </el-row><hr>
                 <!-- show medicalRec for medical task -->
-                <el-form :model="medicalForm" label-width="25%" v-if="listQ[selectedIndex].task === 'Medical'">
+                <el-form :model="medicalForm" ref="medicalForm" label-width="25%" v-if="listQ[selectedIndex].task === 'Medical'">
                   <h2>Medical Record</h2>
                   <el-table :data="medicalRec" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
                     <el-table-column property="date" label="Date" width="150"></el-table-column>
@@ -83,18 +83,24 @@
                   <el-row>
                     <hr><br>
                     <el-col :span="11">
-                      <el-form-item label="Symptom">
-                        <el-input v-model="medicalForm.symptom"></el-input>
+                      <el-form-item label="Symptom"
+                        prop="symptom"
+                        :rules="rules.information">
+                        <el-input v-model="medicalForm.symptom" clearable></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="13">
-                      <el-form-item label="Medicine">
-                        <el-input v-model="medicalForm.medicine"></el-input>
+                      <el-form-item label="Medicine"
+                      prop="medicine"
+                      :rules="rules.information">
+                        <el-input v-model="medicalForm.medicine" clearable></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
-                  <el-form-item label="Notation" label-width="11%">
-                    <el-input type="textarea" :rows="3" v-model="medicalForm.notation"></el-input>
+                  <el-form-item label="Notation" label-width="11%"
+                  prop="notation"
+                  :rules="rules.description">
+                    <el-input type="textarea" :rows="3" v-model="medicalForm.notation" clearable></el-input>
                   </el-form-item>
                   <el-checkbox-group v-model="appointment" fill="#909497">
                     <el-checkbox-button label="Make Appointment"></el-checkbox-button>
@@ -102,7 +108,7 @@
                 </el-form>
 
                 <!-- show vaccinelRec for vaccine task -->
-                <el-form :model="vaccineForm" label-width="25%" v-if="listQ[selectedIndex].task === 'Vaccine'">
+                <el-form :model="vaccineForm" ref="vaccineForm" label-width="25%" v-if="listQ[selectedIndex].task === 'Vaccine'">
                   <h2>Vaccine Record</h2>
                   <el-table :data="vaccineRec" :default-sort = "{prop: 'date', order: 'descending'}" height=250 size="small">
                     <el-table-column property="givenDate" label="Given Date" width="150"></el-table-column>
@@ -116,26 +122,34 @@
                   <el-row>
                     <hr><br>
                     <el-col :span="11">
-                      <el-form-item label="Immunization">
-                        <el-input v-model="vaccineForm.immunization"></el-input>
+                      <el-form-item label="Immunization"
+                      prop="immunization"
+                      :rules="rules.information">
+                        <el-input v-model="vaccineForm.immunization" clearable></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="13">
-                      <el-form-item label="Vaccine">
-                        <el-input v-model="vaccineForm.vaccine"></el-input>
+                      <el-form-item label="Vaccine"
+                      prop="vaccine"
+                      :rules="rules.information">
+                        <el-input v-model="vaccineForm.vaccine" clearable></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col :span="11">
-                      <el-form-item label="Dose">
-                        <el-input v-model="vaccineForm.dose"></el-input>
+                      <el-form-item label="Dose"
+                      prop="dose"
+                      :rules="rules.numberStr">
+                        <el-input v-model.number="vaccineForm.dose" clearable></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col :span="11">
-                      <el-form-item label="Next Due">
+                      <el-form-item label="Next Due"
+                      prop="nextDue"
+                      :rules="rules.date">
                         <el-date-picker
                           v-model="vaccineForm.nextDue"
                           type="date"
@@ -145,7 +159,9 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="13">
-                      <el-form-item label="Time">
+                      <el-form-item label="Time"
+                      prop="nextTime"
+                      :rules="rules.time">
                         <el-time-select
                           v-model="vaccineForm.nextTime"
                           :picker-options="{
@@ -157,7 +173,9 @@
                       </el-form-item>
                     </el-col>
                   </el-row>
-                  <el-form-item label="Description" label-width="11%">
+                  <el-form-item label="Description" label-width="11%"
+                  prop="description"
+                  :rules="rules.description">
                     <el-input type="textarea" :rows="3" v-model="vaccineForm.description"></el-input>
                   </el-form-item>
                 </el-form>
@@ -165,28 +183,37 @@
                 <!-- appointment button for medical task -->
                 <span v-if="appointment">
                   <br><hr>
-                  <el-form :model="appointmentForm" label-width="25%" v-if="listQ[selectedIndex].task === 'Medical'">
+                  <el-form :model="appointmentForm" ref="appointmentForm" label-width="25%" v-if="listQ[selectedIndex].task === 'Medical'">
                     <el-row>
                       <el-col :span="11">
-                        <el-form-item label="Day">
-                          <el-date-picker v-model="appointmentForm.date" type="date"
-                          format="dd/MM/yyyy" placeholder="Pick a day"></el-date-picker>
+                        <el-form-item label="Day"
+                        prop="date"
+                        :rules="rules.date">
+                          <el-date-picker v-model="appointmentForm.date"
+                          type="date"
+                          format="dd/MM/yyyy"
+                          placeholder="Pick a day">
+                          </el-date-picker>
                         </el-form-item>
                       </el-col>
                       <el-col :span="13">
-                        <el-form-item label="Time">
+                        <el-form-item label="Time"
+                        prop="time"
+                        :rules="rules.time">
                           <el-time-select
-                            v-model="appointmentForm.time"
-                            :picker-options="{
-                              start: '08:30',
-                              step: '00:30',
-                              end: '19:30' }"
+                          v-model="appointmentForm.time"
+                          :picker-options="{
+                            start: '08:30',
+                            step: '00:30',
+                            end: '19:30' }"
                             placeholder="Select time">
                           </el-time-select>
                         </el-form-item>
                       </el-col>
                     </el-row>
-                    <el-form-item label="Description" label-width="11%">
+                    <el-form-item label="Description" label-width="11%"
+                    prop="description"
+                    :rules="rules.description">
                       <el-input type="textarea" :rows="3" v-model="appointmentForm.description"></el-input>
                     </el-form-item>
                   </el-form>
@@ -217,7 +244,6 @@
   new Vue({
   el:"#queue",
   delimiters: ['[[', ']]'],
-
   data: {
     firstName:'{{name}}',
     lastName:'{{surname}}',
@@ -259,7 +285,24 @@
       time:'',
       description:''
     },
-    selectedIndex:0
+    selectedIndex:0,
+    rules: {
+      information: [
+        { required: true, message: 'Please Input Information', trigger: 'change' },
+      ],
+      numberStr: [
+        { type:'number', required: true, message: 'Input must be a Numbers', trigger: 'change' },
+      ],
+      description:[
+        { required: true, message: 'Please Input Description', trigger: 'change' },
+      ],
+      date: [
+        { type: 'date', required: true, message: 'Please pick a Date', trigger: 'change' }
+      ],
+      time: [
+        { required: true, message: 'Please pick a Time', trigger: 'change' }
+      ]
+    }
   },
   created: function() {
         setInterval(this.getList, 5000);
@@ -316,108 +359,139 @@
 
       },
       submit() {
-        this.dialogFormVisible = false;
-
-        if (this.appointment) {
-          var date = new Date(this.appointmentForm.date);
-          axios({
-               method: 'push',
-               url: 'Makeappointment',
-               data: {
-                    'pet_name':this.listQ[this.selectedIndex].petName,
-                    'next_due':date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear(),
-                    'time':this.appointmentForm.time,
-                    'Description':this.appointmentForm.description,
-                    'username':this.listQ[this.selectedIndex].username,
-
-               },
-               xsrfCookieName: 'csrftoken',
-               xsrfHeaderName: 'X-CSRFToken',
-               headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
-               }).then(res => {
-
-               });
-          this.appointment = false;
-
-          // data to create Appointment
-          console.log('Asend'+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear(),
-          this.appointmentForm.time,this.listQ[this.selectedIndex].petName,this.appointmentForm.description);
-
-          this.appointmentForm.date = '';
-          this.appointmentForm.time = '';
-          this.appointmentForm.description = '';
-        }
         if (this.listQ[this.selectedIndex].task == 'Medical') {
-          var today = new Date();
-          // data to create MedicalRec
-          console.log('MRsend'+today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear(),
-          this.listQ[this.selectedIndex].age,this.medicalForm.symptom,this.medicalForm.medicine,
-          this.medicalForm.notation,this.firstName,this.lastName);
-          axios({
-               method: 'post',
-               url: 'createMedical',
-               data: {
-                'username':this.listQ[this.selectedIndex].username,
-                    'pet_name':this.listQ[this.selectedIndex].petName,
-                    'medical_date':today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear(),
-                    'symptom':this.medicalForm.symptom,
-                    'medicine':this.medicalForm.medicine,
-                    'monation':this.medicalForm.notation,
-                    'veterinarian':this.firstName +' ' + this.lastName,
-               },
-               xsrfCookieName: 'csrftoken',
-               xsrfHeaderName: 'X-CSRFToken',
-               headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
-               }).then(res => {
-                       window.location.href="";
-               });
-          this.medicalForm.symptom = '';
-          this.medicalForm.medicine = '';
-          this.medicalForm.notation = '';
+          console.log(this.$refs.medicalForm);
+          this.$refs.medicalForm[0].validate((valid) => {
+            if (valid) {
+              // Check Appointment //
+              if (this.appointment) {
+                this.$refs.appointmentForm[0].validate((valid) => {
+                  if (valid) {
+                    this.appointment = false;
+                    var date = new Date(this.appointmentForm.date);
+                    axios({
+                         method: 'push',
+                         url: 'Makeappointment',
+                         data: {
+                              'pet_name':this.listQ[this.selectedIndex].petName,
+                              'next_due':date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear(),
+                              'time':this.appointmentForm.time,
+                              'Description':this.appointmentForm.description,
+                              'username':this.listQ[this.selectedIndex].username,
+                         },
+                         xsrfCookieName: 'csrftoken',
+                         xsrfHeaderName: 'X-CSRFToken',
+                         headers: {
+                                  'X-Requested-With': 'XMLHttpRequest',
+                                  'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
+                         }).then(res => {
 
+                         });
+                    this.dialogFormVisible = false;
+                    this.medicalForm.symptom = '';
+                    this.medicalForm.medicine = '';
+                    this.medicalForm.notation = '';
+                    this.$refs.appointmentForm[0].resetFields();
+                    this.$message({
+                      message: 'Medical Task & Appointment Submitted',
+                      type: 'success',
+                      center: true
+                    });
+                  }
+                  else {
+                    this.$message({
+                      message: 'Invalid Information',
+                      type: 'error',
+                      center: true
+                    });
+                  }
+                });
+              }
+              else {
+                var today = new Date();
+                axios({
+                     method: 'post',
+                     url: 'createMedical',
+                     data: {
+                      'username':this.listQ[this.selectedIndex].username,
+                          'pet_name':this.listQ[this.selectedIndex].petName,
+                          'medical_date':today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear(),
+                          'symptom':this.medicalForm.symptom,
+                          'medicine':this.medicalForm.medicine,
+                          'monation':this.medicalForm.notation,
+                          'veterinarian':this.firstName +' ' + this.lastName,
+                     },
+                     xsrfCookieName: 'csrftoken',
+                     xsrfHeaderName: 'X-CSRFToken',
+                     headers: {
+                              'X-Requested-With': 'XMLHttpRequest',
+                              'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
+                     }).then(res => {
+                             window.location.href="";
+                     });
+                this.$message({
+                  message: 'Medical Task Submitted',
+                  type: 'success',
+                  center: true
+                });
+                this.dialogFormVisible = false;
+                this.$refs.medicalForm[0].resetFields();
+              }
+
+
+            } else {
+              this.$message({
+                message: 'invalid Information',
+                type: 'error',
+                center: true
+              });
+            }
+          });
         }
         else if (this.listQ[this.selectedIndex].task == 'Vaccine') {
-          var today = new Date();
-          var date = new Date(this.vaccineForm.nextDue);
-          // data to create VaccineRec
-          console.log('VRsend'+today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear(),
-          this.listQ[this.selectedIndex].age,this.vaccineForm.immunization,this.vaccineForm.vaccine,
-          this.vaccineForm.dose,date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear(),this.firstName,this.lastName);
-          console.log('Asend'+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear(),this.vaccineForm.nextTime,
-          this.listQ[this.selectedIndex].petName,this.vaccineForm.description);
-          axios({
-               method: 'post',
-               url: 'createVaccine',
-               data: {
-                'username':this.listQ[this.selectedIndex].username,
-                    'pet_name':this.listQ[this.selectedIndex].petName,
-                    'vaccine_date':today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear(),
-                    'immunization':this.vaccineForm.immunization,
-                    'vaccine':this.vaccineForm.vaccine,
-                    'dose':this.vaccineForm.dose,
-                    'next_due': date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+ ' ',
-                    'vaccine_time':this.vaccineForm.nextTime,
-                    'veterinarian':this.firstName +' ' + this.lastName,
-                    'description': this.vaccineForm.description,
-               },
-               xsrfCookieName: 'csrftoken',
-               xsrfHeaderName: 'X-CSRFToken',
-               headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
-               }).then(res => {
-                       window.location.href="";
-               });
-          this.vaccineForm.immunization = '';
-          this.vaccineForm.vaccine = '';
-          this.vaccineForm.dose = '';
-          this.vaccineForm.nextDue = '';
-          this.vaccineForm.nextTime = '';
-          this.vaccineForm.description = '';
+          console.log(this.$refs.vaccineForm);
+          this.$refs.vaccineForm[0].validate((valid) => {
+            if (valid) {
+              var today = new Date();
+              var date = new Date(this.vaccineForm.nextDue);
+              axios({
+                   method: 'post',
+                   url: 'createVaccine',
+                   data: {
+                    'username':this.listQ[this.selectedIndex].username,
+                        'pet_name':this.listQ[this.selectedIndex].petName,
+                        'vaccine_date':today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear(),
+                        'immunization':this.vaccineForm.immunization,
+                        'vaccine':this.vaccineForm.vaccine,
+                        'dose':this.vaccineForm.dose,
+                        'next_due': date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+ ' ',
+                        'vaccine_time':this.vaccineForm.nextTime,
+                        'veterinarian':this.firstName +' ' + this.lastName,
+                        'description': this.vaccineForm.description,
+                   },
+                   xsrfCookieName: 'csrftoken',
+                   xsrfHeaderName: 'X-CSRFToken',
+                   headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
+                   }).then(res => {
+                           window.location.href="";
+                   });
+              this.$message({
+                message: 'Vaccine Task Submitted',
+                type: 'success',
+                center: true
+              });
+              this.$refs.vaccineForm[0].resetFields();
+              this.dialogFormVisible = false;
+            } else {
+              this.$message({
+                message: 'Invalid Information',
+                type: 'error',
+                center: true
+              });
+            }
+          });
         }
       },
       discard() {

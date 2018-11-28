@@ -28,9 +28,11 @@
 
       <div class="cardd" id="petList" style="padding-bottom:45px">
         <h2>Select Pet</h2>
-        <div v-for="list in listPet">
+        <!--<div v-for="list in listPet">-->
+        <div v-for="(list,index) in listPet">
           <div class="petCard" style="height:80px;"
-          @click="openTaskDialog(list)">
+               @click="openTaskDialog(list,index)">
+          <!--@click="openTaskDialog(list)">-->
           <el-row>
             <el-col :span="12">
               Pet Name: [[list.petName]]<br>
@@ -58,103 +60,202 @@
                 Age: [[listPet[selectedIndex].age]]<br><br>
                 Sickness: [[listPet[selectedIndex].sick]]
               </el-col>
-              <p style="font-size:18px">
-                <el-button type="info" plain style="float:right"
-                @click="editTaskInfo = !editTaskInfo,
-                createTask()">Create Task</el-button>
-              </p>
-            </el-row><hr>
-            <div v-if="editTaskInfo === true">
-              <el-form :model="task" label-width="15%">
+            </el-row>
+            <hr>
+            <div>
+              <el-form :model="taskForm" ref="taskForm">
                 <el-row>
                   <el-col :span="10">
-                    <el-form-item label="Pet Name" label-width="20%">
-                      <el-input v-model="task.petName" maxlength=30></el-input>
+                    <el-form-item label="Pet Name"
+                    prop="petName"
+                    label-width="30%"
+                    :rules="rules.alphaStr">
+                      <el-input v-model="taskForm.petName" maxlength="30" clearable></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="10">
-                    <el-form-item label="Breed" label-width="20%">
-                      <el-input v-model="task.breed" maxlength=30></el-input>
+                    <el-form-item label="Breed"
+                    prop="breed"
+                    label-width="30%"
+                    :rules="rules.alphaStr">
+                      <el-input v-model="taskForm.breed" maxlength="30" clearable></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="10">
-                    <el-form-item label="Weight" label-width="20%">
-                      <el-input v-model="task.weight"></el-input>
+                    <el-form-item label="Weight"
+                    prop="weight"
+                    label-width="30%"
+                    :rules="rules.numberStr">
+                      <el-input v-model="taskForm.weight" maxlength="30" clearable></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <div><br></div>
+                <el-row>
+                  <el-col :span="10">
+                    <el-form-item label="Heart Rate"
+                    prop="heartRate"
+                    label-width="30%"
+                    :rules="rules.numberStr">
+                      <el-input v-model="taskForm.heartRate" maxlength="30" clearable></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-form-item label="Rest Rate" prop="restRate"
+                    label-width="30%"
+                    :rules="rules.numberStr">
+                      <el-input v-model="taskForm.restRate" maxlength="30" clearable></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="10">
-                    <el-form-item label="Heart Rate" label-width="20%">
-                      <el-input v-model="task.heartRate"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="10">
-                    <el-form-item label="Rest Rate" label-width="20%">
-                      <el-input v-model="task.restRate"></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="10">
-                    <el-form-item label="Dehydration" label-width="20%">
-                      <el-radio-group v-model="task.dehydration" fill="#909497">
+                    <el-form-item label="Dehydration" label-width="30%"  >
+                      <el-radio-group v-model="taskForm.dehydration" fill="#909497">
                         <el-radio-button label="Yes"></el-radio-button>
                         <el-radio-button label="No"></el-radio-button>
                       </el-radio-group>
                     </el-form-item>
                   </el-col>
                 </el-row>
+                <div><br></div>
                 <el-row>
-                  <div>
-                    <el-button type="info" plain style="float:right"
-                    @click="medical = !medical, desTask = !desTask,
-                    vaccine = false">Medical</el-button>
-                    <el-button type="info" plain style="float:right; margin-right:10px"
-                    @click="vaccine = !vaccine, desTask = !desTask,
-                    medical = false">Vaccine</el-button>
-                  </div>
-                </el-row><hr>
-                <div v-if="vaccine === true" align="center">
-                  <el-form-item label="Vaccine Description" label-width="50%">
+                  <el-col :span="10">
+                    <el-form-item label="Vet" label-width="30%"  >
+                      <el-autocomplete
+                      class="inline-input"
+                      v-model="state2"
+                      :fetch-suggestions="querySearch"
+                      placeholder="Search Vet"
+                      :trigger-on-focus="false"
+                      @select="selectVet"
+                      ></el-autocomplete>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-form-item label="Task" label-width="30%"  >
+                      <el-radio-group v-model="taskForm.service" fill="#909497">
+                        <el-radio-button label="Medical"></el-radio-button>
+                        <el-radio-button label="Vaccine"></el-radio-button>
+                      </el-radio-group>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-form-item label="Description" label-width="12%">
                     <el-input type="textarea"
                     :autosize="{ minRows: 2, maxRows: 4}"
-                    v-model="task.description"></el-input>
+                    v-model="taskForm.description"></el-input>
                   </el-form-item>
-                  <el-form-item label="Vet" label-width="50%">
-                    <el-input v-model="task.vet"></el-input>
-                  </el-form-item>
-                </div>
-                <div v-if="medical === true">
-                  <el-form-item label="Medical Description" label-width="50%">
-                    <el-input type="textarea"
-                    :autosize="{ minRows: 2, maxRows: 4}"
-                    v-model="task.description"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Vet" label-width="50%">
-                    <el-input v-model="task.vet"></el-input>
-                  </el-form-item>
-                </div>
+                </el-row>
+                <hr>
               </el-form>
-              <div v-if="vaccine === true">
-                <el-button type="info" plain style="float:right"
-                @click="resetStatus()">Cancel</el-button>
-                <el-button type="info" plain style="float:right"
-                @click="submitTask()">Submit</el-button>
-              </div>
-              <div v-if="medical === true">
-                <el-button type="info" plain style="float:right"
-                @click="resetStatus()">Cancel</el-button>
-                <el-button type="info" plain style="float:right"
-                @click="submitTask()">Submit</el-button>
-              </div>
-              <br><br>
             </div>
-            <span slot="footer" class="dialog-footer" style="float:middle">
-              <el-form :model="task" label-width="40%">
-              </span>
+            <span slot="footer" class="dialog-footer">
+              <el-button type="info" plain
+              @click="submitTask()">Submit</el-button>
+              <el-button type="info" plain
+              @click="resetStatus()">Cancel</el-button>
+            </span>
+              <!--<p style="font-size:18px">-->
+                <!--<el-button type="info" plain style="float:right"-->
+                <!--@click="editTaskInfo = !editTaskInfo,-->
+                <!--createTask()">Create Task</el-button>-->
+              <!--</p>-->
+            <!--</el-row><hr>-->
+            <!--<div v-if="editTaskInfo === true">-->
+              <!--<el-form :model="task" label-width="15%">-->
+                <!--<el-row>-->
+                  <!--<el-col :span="10">-->
+                    <!--<el-form-item label="Pet Name" label-width="20%">-->
+                      <!--<el-input v-model="task.petName" maxlength=30></el-input>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
+                  <!--<el-col :span="10">-->
+                    <!--<el-form-item label="Breed" label-width="20%">-->
+                      <!--<el-input v-model="task.breed" maxlength=30></el-input>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+                <!--<el-row>-->
+                  <!--<el-col :span="10">-->
+                    <!--<el-form-item label="Weight" label-width="20%">-->
+                      <!--<el-input v-model="task.weight"></el-input>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+                <!--<el-row>-->
+                  <!--<el-col :span="10">-->
+                    <!--<el-form-item label="Heart Rate" label-width="20%">-->
+                      <!--<el-input v-model="task.heartRate"></el-input>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
+                  <!--<el-col :span="10">-->
+                    <!--<el-form-item label="Rest Rate" label-width="20%">-->
+                      <!--<el-input v-model="task.restRate"></el-input>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+                <!--<el-row>-->
+                  <!--<el-col :span="10">-->
+                    <!--<el-form-item label="Dehydration" label-width="20%">-->
+                      <!--<el-radio-group v-model="task.dehydration" fill="#909497">-->
+                        <!--<el-radio-button label="Yes"></el-radio-button>-->
+                        <!--<el-radio-button label="No"></el-radio-button>-->
+                      <!--</el-radio-group>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+                <!--<el-row>-->
+                  <!--<div>-->
+                    <!--<el-button type="info" plain style="float:right"-->
+                    <!--@click="medical = !medical, desTask = !desTask,-->
+                    <!--vaccine = false">Medical</el-button>-->
+                    <!--<el-button type="info" plain style="float:right; margin-right:10px"-->
+                    <!--@click="vaccine = !vaccine, desTask = !desTask,-->
+                    <!--medical = false">Vaccine</el-button>-->
+                  <!--</div>-->
+                <!--</el-row><hr>-->
+                <!--<div v-if="vaccine === true" align="center">-->
+                  <!--<el-form-item label="Vaccine Description" label-width="50%">-->
+                    <!--<el-input type="textarea"-->
+                    <!--:autosize="{ minRows: 2, maxRows: 4}"-->
+                    <!--v-model="task.description"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="Vet" label-width="50%">-->
+                    <!--<el-input v-model="task.vet"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</div>-->
+                <!--<div v-if="medical === true">-->
+                  <!--<el-form-item label="Medical Description" label-width="50%">-->
+                    <!--<el-input type="textarea"-->
+                    <!--:autosize="{ minRows: 2, maxRows: 4}"-->
+                    <!--v-model="task.description"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="Vet" label-width="50%">-->
+                    <!--<el-input v-model="task.vet"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</div>-->
+              <!--</el-form>-->
+              <!--<div v-if="vaccine === true">-->
+                <!--<el-button type="info" plain style="float:right"-->
+                <!--@click="resetStatus()">Cancel</el-button>-->
+                <!--<el-button type="info" plain style="float:right"-->
+                <!--@click="submitTask()">Submit</el-button>-->
+              <!--</div>-->
+              <!--<div v-if="medical === true">-->
+                <!--<el-button type="info" plain style="float:right"-->
+                <!--@click="resetStatus()">Cancel</el-button>-->
+                <!--<el-button type="info" plain style="float:right"-->
+                <!--@click="submitTask()">Submit</el-button>-->
+              <!--</div>-->
+              <!--<br><br>-->
+            <!--</div>-->
+            <!--<span slot="footer" class="dialog-footer" style="float:middle">-->
+              <!--<el-form :model="task" label-width="40%">-->
+              <!--</span>-->
             </el-dialog>
           </span>
           <br>
@@ -162,38 +263,50 @@
         <el-button type="text" style="float:right; margin-right:0px; color:#797D7F;"
         @click="openAddPetDialog=true">Add Pet</el-button>
         <span>
-          <el-dialog :visible.sync="openAddPetDialog" width=50%>
+          <el-dialog :visible.sync="openAddPetDialog" width=70%>
             <h2>Fill Pet Information</h2>
-            <el-form :model="task" label-width="25%">
+            <el-form :model="newPet" ref="newPet" label-width="25%">
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label="Pet Name">
-                    <el-input v-model="newPet.petName"></el-input>
+                  <el-form-item label="Pet Name"
+                  label-width="25%"
+                  prop="petName"
+                  :rules="rules.alphaStr">
+                    <el-input v-model="newPet.petName" maxlength="30" clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="Type">
-                    <el-input v-model="newPet.type"></el-input>
+                  <el-form-item label="Type" prop="type"  >
+                    <el-radio-group v-model="newPet.type" fill="#909497">
+                      <el-radio-button label="Dog"></el-radio-button>
+                      <el-radio-button label="Cat"></el-radio-button>
+                    </el-radio-group>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label="Date of Birth">
+                  <el-form-item label="Breed"
+                  prop="breed"
+                  :rules="rules.alphaStr">
+                    <el-input v-model="newPet.breed" maxlength="30" clearable></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12" style="float:left;">
+                  <el-form-item label="Sickness"
+                  prop="sick"
+                  :rules="rules.alphaStr">
+                    <el-input v-model="newPet.sick" maxlength="30" clearable></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="Date of Birth"
+                  prop="birthDate"
+                  :rules="rules.date">
                     <el-date-picker type="date" v-model="newPet.birthDate"
                     format="dd/MM/yyyy" placeholder="Select date"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="Breed">
-                    <el-input v-model="newPet.breed"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="12" style="float:left;">
-                  <el-form-item label="Sickness">
-                    <el-input v-model="newPet.sick"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -202,7 +315,7 @@
               <el-button type="info" plain
               @click="submitNewPet()">Add</el-button>
               <el-button type="info" plain
-              @click="openAddPetDialog=false">Cancel</el-button>
+              @click="discardNewPet()">Cancel</el-button>
             </span>
           </el-dialog>
         </span>
@@ -215,48 +328,23 @@
 </body>
 <!-- import Vue before Element -->
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
-<!-- <script src="https://unpkg.com/vue"></script>
+<!--&lt;!&ndash; <script src="https://unpkg.com/vue"></script>-->
 <script src="https://unpkg.com/element-ui"></script>
 <script src="https://unpkg.com/element-ui/lib/umd/locale/en.js"></script>
 
 <script>
   ELEMENT.locale(ELEMENT.lang.en)
-</script> -->
+</script>
 <!-- import JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js" charset="utf-8"></script>
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
 <script>
   new Vue({
   el:"#userProfile",
   delimiters: ['[[', ']]'],
   data:{
     name:'{{name}}',
-    surname:'{{surname}}',
-    tel:'{{tel}}',
-    email:'{{email}}',
-    dialogFormVisible:false,
-    form: {
-      firstName:'',
-      lastName:'',
-      telNo:'',
-      emailAddr:''
-    }
-  },
-  methods:{
-    openDialog() {
-      this.dialogFormVisible = true;
-      this.form.firstName = this.name;
-      this.form.lastName = this.surname;
-      this.form.telNo = this.tel;
-      this.form.emailAddr = this.email;
-    },
-    changeProfile() {
-      this.dialogFormVisible = false;
-      this.name = this.form.firstName;
-      this.surname = this.form.lastName;
-      this.tel = this.form.telNo;
-      this.email = this.form.emailAddr;
-    }
+    surname:'{{surname}}'
   }
 });
 
@@ -264,6 +352,8 @@ new Vue({
   el:"#petList",
   delimiters: ['[[', ']]'],
   data:{
+    links: [],
+    state2: '',
     listPet:[],
     selectedIndex:0,
     taskDialogVisible:false,
@@ -272,47 +362,81 @@ new Vue({
     medical:false,
     desTask:false,
     openAddPetDialog:false,
-    task:{
+    taskForm:{
       petName:'',
       breed:'',
       weight:'',
       heartRate:'',
       restRate:'',
-      dehydration:'',
+      dehydration:'No',
+      service:'Medical',
       description:'',
       vet:''
     },
     newPet:{
       petName:'',
-      type:'',
+      type:'Dog',
       birthDate:'',
       age:'',
       breed:'',
       sick:''
+    },
+    rules: {
+      alphaStr: [
+        { required: true, message: 'Please Input Information', trigger: 'change' },
+        { min: 1, max: 30, message: 'Length should be 1 to 30', trigger: 'change' },
+        { pattern: '^[A-Za-z]+$', message: 'Input must be a Letters', trigger: 'change' }
+      ],
+      numberStr: [
+        { required: true, message: 'Please Input Information', trigger: 'change' },
+        { min: 1, max: 30, message: 'Length should be 1 to 30', trigger: 'change' },
+        { pattern: '^[0-9]+$', message: 'Input must be a Numbers', trigger: 'change' }
+      ],
+      date: [
+        { type: 'date', required: true, message: 'Please pick a Date', trigger: 'change' }
+      ]
     }
   },
   methods:{
-    openTaskDialog(x) {
+    openTaskDialog(x,index) {
       this.editTaskInfo = false;
-      this.vaccine = false;
-      this.medical=false;
-      this.desTask = false;
       this.taskDialogVisible = true;
-      this.task.dehydration='';
-      this.selectedIndex = this.listPet.indexOf(x);
+      this.selectedIndex = index;
+      this.taskForm.petName = this.listPet[this.selectedIndex].petName;
+      this.taskForm.breed = this.listPet[this.selectedIndex].breed;
+      console.log(this.listPet[this.selectedIndex].petName);
+
+      // this.editTaskInfo = false;
+      // this.vaccine = false;
+      //  this.medical=false;
+      // this.desTask = false;
+      // this.taskDialogVisible = true;
+      // this.task.dehydration='';
+      // this.selectedIndex = this.listPet.indexOf(x);
       // console.log(this.listPet[this.selectedIndex].petName);
     },
-    createTask(){
-      this.task.petName = this.listPet[this.selectedIndex].petName;
-      this.task.breed = this.listPet[this.selectedIndex].breed;
-    },
+    // createTask(){
+      // this.task.petName = this.listPet[this.selectedIndex].petName;
+      // this.task.breed = this.listPet[this.selectedIndex].breed;
+    // },
     resetStatus(){
       this.editTaskInfo = false;
-      this.vaccine = false;
-      this.medical=false;
-      this.desTask = false;
       this.taskDialogVisible = false;
-      this.task.dehydration='';
+      this.taskForm.weight='';
+      this.taskForm.heartRate='';
+      this.taskForm.restRate='';
+      this.taskForm.description ='';
+      this.taskForm.vet ='';
+      this.taskForm.dehydration='No';
+      this.taskForm.service='Medical';
+      this.state2='';
+
+      // this.editTaskInfo = false;
+      // this.vaccine = false;
+      // this.medical=false;
+      // this.desTask = false;
+      // this.taskDialogVisible = false;
+      // this.task.dehydration='';
     },
     submitTask(){
       // console.log(this.task.petName);
@@ -323,20 +447,29 @@ new Vue({
       // console.log(this.task.dehydration);
       // console.log(this.task.description);
       // console.log(this.task.vet);
-      if(this.medical) { console.log("Md")
-      axios({
+      this.$refs.taskForm[this.selectedIndex].validate((valid) => {
+          if (valid) {
+            this.$message({
+              message: 'Task Submitted',
+              type: 'success',
+              center: true
+            });
+            console.log(this.taskForm.vet);
+
+            if(this.taskForm.service === 'Medical') {
+              axios({
                method: 'post',
                url: '../makeQueue/',
                data: {
-                 'username':'{{username}}',
-                    'pet_name':this.task.petName,
-                    'pet_weight':this.task.weight,
-                    'pet_heartRate':this.task.heartRate,
-                    'pet_restRate':this.task.restRate,
-                    'pet_Dehydration':this.task.dehydration,
-                    'pet_want':'Medical',
-                    'veterinarian' : this.task.vet,
-                    'description':this.task.description
+                  'username':'{{username}}',
+                  'pet_name':this.taskForm.petName,
+                  'pet_weight':this.taskForm.weight,
+                  'pet_heartRate':this.taskForm.heartRate,
+                  'pet_restRate':this.taskForm.restRate,
+                  'pet_Dehydration':this.taskForm.dehydration,
+                  'pet_want':'Medical',
+                  'veterinarian' : this.taskForm.vet,
+                  'description':this.taskForm.description
                },
                xsrfCookieName: 'csrftoken',
                xsrfHeaderName: 'X-CSRFToken',
@@ -344,32 +477,29 @@ new Vue({
                         'X-Requested-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
                }).then(res => {
-                      if(res.data.res == 'suc')  window.location.href="";
-                      else{
-                        this.$message({
-                      message: 'You has Queue',
-                      type: 'success',
-                      center: true
-      });
-
-                      }
+                      //if(res.data.res == 'suc')  window.location.href="";
+                      //else{
+                      //  this.$message({
+                      //message: 'You has Queue',
+                      //type: 'success',
+                      //center: true
+                      //});
+                   //}
                });
-
-      }
-      else {{console.log("Vc")
-      axios({
+            } else {
+              axios({
                method: 'post',
                url: '../makeQueue/',
                data: {
                     'username':'{{username}}',
-                    'pet_name':this.task.petName,
-                    'pet_weight':this.task.weight,
-                    'pet_heartRate':this.task.heartRate,
-                    'pet_restRate':this.task.restRate,
-                    'pet_Dehydration':this.task.dehydration,
+                    'pet_name':this.taskForm.petName,
+                    'pet_weight':this.taskForm.weight,
+                    'pet_heartRate':this.taskForm.heartRate,
+                    'pet_restRate':this.taskForm.restRate,
+                    'pet_Dehydration':this.taskForm.dehydration,
                     'pet_want':'Vaccine',
-                    'veterinarian' : this.task.vet,
-                    'description':this.task.description
+                    'veterinarian' : this.taskForm.vet,
+                    'description':this.taskForm.description
                },
                xsrfCookieName: 'csrftoken',
                xsrfHeaderName: 'X-CSRFToken',
@@ -377,29 +507,40 @@ new Vue({
                         'X-Requested-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
                }).then(res => {
-                if(res.data.res == 'suc')  window.location.href="";
-                      else{
-                        this.$message({
-                      message: 'You has Queue',
-                      type: 'success',
-                      center: true
-      });
-
-                      }
+                //if(res.data.res == 'suc')  window.location.href="";
+                //   else{
+                //      this.$message({
+                //      message: 'You has Queue',
+                //      type: 'success',
+                //      center: true
+                //      });
+                //    }
                });
-      }
+            }
 
-}
-      this.resetStatus();
+          this.resetStatus();
+          this.$refs.taskForm[this.selectedIndex].resetFields();
+          } else {
+            this.$message({
+              message: 'Invalid Information',
+              type: 'error',
+              center: true
+            });
+          }
+        });
+    // this.resetStatus();
 
     },
     
     submitNewPet(){
-      this.openAddPetDialog = false;
-      this.newPet.age = this.computeAge(this.newPet.birthDate);
-      // console.log(this.newPet.age)
-      console.log(this.newPet.petName,this.newPet.type,this.newPet.birthDate.getDate(),this.newPet.age,this.newPet.breed,this.newPet.sick)//,this.newPet.age,this.newPet.breed,this.newPet.sick);
-      axios({
+      this.$refs.newPet.validate((valid) => {
+          if (valid) {
+            this.$message({
+              message: 'New Pet Added',
+              type: 'success',
+              center: true
+            });
+            axios({
                method: 'post',
                url: 'newPet/',
                data: {
@@ -418,53 +559,70 @@ new Vue({
                         'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
                }).then(res => {
                   if(res.data.res == "can")
-                       window.location.href="";
-                  else{
-                   
-                        this.$message({
-                      message: 'You has pet name adnd type',
-                      type: 'error',
-                      center: true
-      });
-                  }
+                    window.location.reload();
+                       //window.location.href="";
+                  //else{
+                  //      this.$message({
+                  //    message: 'You has pet name adnd type',
+                  //    type: 'error',
+                  //    center: true
+                  //    });
+                  //}
                });
+            this.discardNewPet();
+          } else {
+            this.$message({
+              message: 'Invalid Information',
+              type: 'error',
+              center: true
+            });
+          }
+        });
 
-      this.$message({
-        message: 'New Pet Added',
-        type: 'success',
-        center: true
-      });
+      // this.openAddPetDialog = false;
+      // this.newPet.age = this.computeAge(this.newPet.birthDate);
+      // console.log(this.newPet.age)
+      // console.log(this.newPet.petName,this.newPet.type,this.newPet.birthDate.getDate(),this.newPet.age,this.newPet.breed,this.newPet.sick)//,this.newPet.age,this.newPet.breed,this.newPet.sick);
     },
     getList: function () {
 
 
-},
-    computeAge(bd) {
-      var bdate = new Date(bd);
-      var today = new Date();
-      var str = '';
-      var year = today.getFullYear() - bdate.getFullYear();
-      var month = today.getMonth()+1 - bdate.getMonth();
-      var day = today.getDate() - bdate.getDate();
-      if (month<0 || (month==0 && day<0))  year--;
-      if (year==0 && month<5) var week = month*4;
-      if (year ==0) {
-        if (month<5) str = week+'weeks';
-        else str = month+'m';
-      }
-      else {
-        if (month==0) str = year+'y';
-        else str = year+'y'+month+'m';
-      }
-      return str;
+    },
+    discardNewPet(){
+      this.openAddPetDialog=false;
+      this.newPet.petName = '';
+      this.newPet.type = 'Dog';
+      this.newPet.breed = '';
+      this.newPet.sick = '';
+      this.newPet.birthDate = '';
     },
     mounted: function () {
         this.getList();
+      },
+    querySearch(queryString, cb) {
+      if(queryString.length > 1) {
+        this.links = this.loadAll(queryString);
+        // call callback function to return suggestions
+        cb(this.links);
       }
     },
-    beforeMount: function () {
-
-
+    loadAll(str) {
+      return [
+        { "value": "asetzzz"  },
+        { "value": "vet" },
+        { "value": "lkvetsadasd" },
+        { "value": "hvaf" },
+        { "value": "zvfgsue" },
+        { "value": "uvbnn" },
+        { "value": "zzvue" }
+      ];
+    },
+    selectVet(item) {
+      this.taskForm.vet = item.value;
+      // Add task to Vet //
+    }
+  },
+  beforeMount: function () {
       axios({
         method: 'push',
         url: '../getJason',
@@ -473,7 +631,7 @@ new Vue({
         },
         xsrfCookieName: 'csrftoken',
         
-//  xsrfCookieName: '{{ csrf_token }}',
+//      xsrfCookieName: '{{ csrf_token }}',
         xsrfHeaderName: 'X-CSRFToken',
         headers: {
                  'X-Requested-With': 'XMLHttpRequest',
@@ -482,7 +640,7 @@ new Vue({
           console.log(res.data);
           this.listPet = res.data;
         });
-    }
+   }
   
 });
 

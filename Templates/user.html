@@ -37,18 +37,18 @@
           </template>
           <!-- pop-up for edit profile -->
           <el-dialog title="Edit Profile" :visible.sync="dialogFormVisible">
-            <el-form :model="form" label-width="15%">
-              <el-form-item label="First Name">
-                <el-input v-model="form.firstName" name="editFirstName"></el-input>
+            <el-form :model="form" label-width="15%" ref="form">
+              <el-form-item label="First Name" :rules="rules.name" prop="firstName">
+                <el-input v-model="form.firstName" name="editFirstName" maxlength=30 clearable></el-input>
               </el-form-item>
-              <el-form-item label="Last Name">
-                <el-input v-model="form.lastName" name="editLastName"></el-input>
+              <el-form-item label="Last Name" :rules="rules.name" prop="lastName">
+                <el-input v-model="form.lastName" name="editLastName" maxlength=30 clearable></el-input>
               </el-form-item>
-              <el-form-item label="Tel">
-                <el-input v-model="form.telNo" name="editTel"></el-input>
+              <el-form-item label="Tel" :rules="rules.telNo" prop="telNo">
+                <el-input v-model="form.telNo" name="editTel" maxlength=10 clearable></el-input>
               </el-form-item>
-              <el-form-item label="Email">
-                <el-input v-model="form.emailAddr" name="editEmail"></el-input>
+              <el-form-item label="Email" :rules="rules.emailAddr" prop="emailAddr">
+                <el-input v-model="form.emailAddr" name="editEmail" clearable></el-input>
               </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -104,22 +104,9 @@
                 <!-- edit button is pressed -->
                 <div v-if="editPetInfo === true">
                   <!-- edit pet information form -->
-                  <el-form :model="editPetForm" label-width="15%">
-                    <el-row>
-                      <el-col :span="10">
-                        <el-form-item label="Pet Name" label-width="36%">
-                          <el-input v-model="editPetForm.petName"></el-input>
-                        </el-form-item>
-                      </el-col>
-                      <el-col :span="12">
-                        <el-form-item label="Breed" label-width="42%">
-                          <el-input v-model="editPetForm.breed"></el-input>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                    <el-form-item label="Date of Birth">
-                      <el-date-picker type="date" v-model="editPetForm.birthDate"
-                      format="dd/MM/yyyy" placeholder="Select date"></el-date-picker>
+                  <el-form :model="editPetForm" ref="editPetForm" label-width="15%">
+                    <el-form-item label="Pet Name" label-width="36%" :rules ="rules.petName" prop="petName">
+                      <el-input v-model="editPetForm.petName" maxlength=30 clearable></el-input>
                     </el-form-item>
                   </el-form>
                   <!-- delete pet from listPet !!!!Not Finish!!!!-->
@@ -154,20 +141,20 @@
                 </div>
 
                 <!-- input email to send all information !!!!Not Finish!!!!-->
-                <span slot="footer" class="dialog-footer" style="float:middle">
-                  <el-form :model="editPetForm" label-width="40%">
-                  <el-row>
-                    <el-col :span="16">
-                      <el-form-item label="Send to Email:">
-                        <el-input></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="4">
+                <!--<span slot="footer" class="dialog-footer" style="float:middle">-->
+                  <!--<el-form :model="editPetForm" label-width="40%">-->
+                  <!--<el-row>-->
+                    <!--<el-col :span="16">-->
+                      <!--<el-form-item label="Send to Email:">-->
+                        <!--<el-input></el-input>-->
+                      <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col :span="4">-->
                       <!-- send button !!!!Not Finish!!!!-->
-                      <el-button type="info" plain>Send</el-button>
-                    </el-col>
-                  </el-row>
-                </span>
+                      <!--<el-button type="info" plain>Send</el-button>-->
+                    <!--</el-col>-->
+                  <!--</el-row>-->
+                <!--</span>-->
               </el-dialog>
             </span>
             <br>
@@ -195,34 +182,7 @@
                   </p>
                 </el-col>
               </el-row><hr>
-              <!-- edit button is pressed -->
-              <div v-if="editPetInfo === true">
-                <!-- edit pet information form -->
-                <el-form :model="editPetForm" label-width="15%">
-                  <el-row>
-                    <el-col :span="10">
-                      <el-form-item label="Pet Name" label-width="36%">
-                        <el-input v-model="editPetForm.petName"></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                      <el-form-item label="Breed" label-width="42%">
-                        <el-input v-model="editPetForm.breed"></el-input>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-form-item label="Date of Birth">
-                    <el-date-picker type="date" v-model="editPetForm.date"
-                    format="dd/MM/yyyy" placeholder="Select date"></el-date-picker>
-                  </el-form-item>
-                </el-form>
-                <!-- delete pet from listPet !!!!Not Finish!!!!-->
-                <el-button type="info" plain style="float:left" @click="deletePet()">Delete</el-button>
-                <el-button type="info" plain style="float:right" @click="editPetInfo = false">Cancel</el-button>
-                <!-- save changes -->
-                <el-button type="info" plain style="float:right" @click="changePetInfo()">Save</el-button>
-                <br><br>
-              </div>
+
               <div>
                 <!-- show medical record table -->
                 <h2>Medical Record</h2>
@@ -247,21 +207,7 @@
                 </el-table>
               </div>
             </div>
-            <!-- input email to send all information !!!!Not Finish!!!!-->
-            <span slot="footer" class="dialog-footer" style="float:middle">
-              <el-form :model="editPetForm" label-width="40%">
-              <el-row>
-                <el-col :span="16">
-                  <el-form-item label="Send to Email:">
-                    <el-input></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <!-- send button !!!!Not Finish!!!!-->
-                  <el-button type="info" plain>Send</el-button>
-                </el-col>
-              </el-row>
-            </span>
+
           </el-dialog>
         </div>
       </div>
@@ -318,11 +264,27 @@
           lastName:'',
           telNo:'',
           emailAddr:''
+        },
+        rules: {
+          name: [
+            { required: true, message: 'Please Input Information', trigger: 'change' },
+            { min: 3, max: 30, message: 'Length should be 3 to 30', trigger: 'change' },
+            { pattern: '^[A-Za-z]+$', message: 'Input must be a Letters', trigger: 'change' }
+          ],
+          telNo: [
+            { required: true, message: 'Please Input Telephone Number', trigger: 'change' },
+            { min: 9, max: 10, message: 'Length should be 9 to 10', trigger: 'change' },
+            { pattern: '^[0-9]+$', message: 'Input must be a Numbers', trigger: 'change' }
+          ],
+          emailAddr: [
+            { required: true, message: 'Please Input Email', trigger: 'change' },
+            { type:'email', message: 'Invalid Email', trigger: 'change' }
+          ]
         }
       },
       methods:{
         openDialog() {
-                console.log('{{listPet}}');
+          console.log('{{listPet}}');
           // show pop-up
           this.dialogFormVisible = true;
           // set default value on input bar
@@ -332,7 +294,15 @@
           this.form.emailAddr = this.email;
         },
         changeProfile() {
-          axios({
+          this.$refs.form.validate((valid) => {
+            if (valid) {
+              this.$message({
+                message: 'Profile Changed',
+                type: 'success',
+                center: true
+              });
+              // save changes
+              axios({
                method: 'post',
                url: 'editProfile/{{pk}}',
                data: {
@@ -349,20 +319,17 @@
                }).then(res => {
                        window.location.href="../user/{{pk}}";
                });
-
-
-
-          // axios
-          //   .get('http://localhost:8000/user/summit')
-          //   .then(response => {
-          //     this.name = response.name
-          //     console.log('great!');
-          //   })
-
-
-
-          // save changes
-          this.dialogFormVisible = false;
+              this.dialogFormVisible = false;
+            } else {
+              this.$message({
+                message: 'Invalid Information',
+                type: 'error',
+                center: true
+              });
+            }
+          });
+          // this.dialogFormVisible = false;
+          this.$refs.form.resetFields();
           // this.name = this.form.firstName;
           // this.surname = this.form.lastName;
           // this.tel = this.form.telNo;
@@ -399,9 +366,14 @@
         editPetInfo:false,
         // form edit name, breed and date of birth of pet
         editPetForm:{
-          petName:'',
-          breed:'',
-          birthDate:''
+          petName:''
+        },
+        rules: {
+          petName: [
+            { required: true, message: 'Please Input Information', trigger: 'change' },
+            { min: 3, max: 30, message: 'Length should be 3 to 30', trigger: 'change' },
+            { pattern: '^[A-Za-z]+$', message: 'Input must be a Letters', trigger: 'change' }
+          ]
         },
         // data which showed in medical record table
         medicalRec: [{
@@ -426,7 +398,6 @@
       methods:{
         openPetDialog(x) {
           // show pop-up
-
           this.petDialogVisible = true;
           this.editPetInfo = false;
           // x is obj to find which index of pet is selected
@@ -436,9 +407,6 @@
         openEditForm() {
           this.editPetInfo = !this.editPetInfo;
           this.editPetForm.petName = this.listPet[this.selectedIndex].petName;
-          this.editPetForm.breed = this.listPet[this.selectedIndex].breed;
-          var date = this.listPet[this.selectedIndex].birthDate.split("/");
-          this.editPetForm.birthDate = new Date(date[2],date[1]-1,date[0]);
         },
         deletePet() {
           console.log(this.selectedIndex,this.listPet[this.selectedIndex].petName);
@@ -454,41 +422,28 @@
           });
         },
         changePetInfo() {
+          this.$refs.editPetForm[0].validate((valid) => {
+            if (valid) {
+              // change information
+              this.listPet[this.selectedIndex].petName = this.editPetForm.petName;
+              // show meg
+              this.$message({
+                message: 'Change Saved',
+                type: 'success',
+                center: true
+              });
+            } else {
+              this.$message({
+                message: 'Invalid Information',
+                type: 'error',
+                center: true
+              });
+            }
+          });
           // close edit form
           this.editPetInfo = false;
           // change information
-          this.listPet[this.selectedIndex].petName = this.editPetForm.petName;
-          this.listPet[this.selectedIndex].breed = this.editPetForm.breed;
-          var date = new Date(this.editPetForm.birthDate);
-          this.listPet[this.selectedIndex].birthDate = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear();
-          this.listPet[this.selectedIndex].age = this.computeAge(this.listPet[this.selectedIndex].birthDate);
-          // show meg
-          this.$message({
-            message: 'Changes Saved',
-            type: 'success',
-            center: true
-          });
-
-        },
-        computeAge(bd) {
-          var t = bd.split("/");
-          var bdate = new Date(t[2],t[1],t[0]);
-          var today = new Date();
-          var str = '';
-          var year = today.getFullYear() - bdate.getFullYear();
-          var month = today.getMonth()+1 - bdate.getMonth();
-          var day = today.getDate() - bdate.getDate();
-          if (month<0 || (month==0 && day<0))  year--;
-          if (year==0 && month<5) var week = month*4;
-          if (year ==0) {
-            if (month<5) str = week+'weeks';
-            else str = month+'m';
-          }
-          else {
-            if (month==0) str = year+'y';
-            else str = year+'y'+month+'m';
-          }
-          return str;
+          // this.listPet[this.selectedIndex].petName = this.editPetForm.petName;
         },
         getMedicalRecord(pet) {
           axios({
@@ -530,10 +485,6 @@
         }).then(res => {
           this.listPet = res.data;
         });
-
-
-
-
       },
 
       delimiters: ['[[', ']]']

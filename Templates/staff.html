@@ -23,6 +23,11 @@
     <div class="row">
       <div class="column side"></div>
       <div class="column middle">
+        <div class="card" style="text-align:center; max-height:100px; padding:20px" id="staff">
+          <!-- show name Vet -->
+          <h3>Asst. {{name}} {{surname}}</h3>
+        </div>
+
         <div class="card" id="searching">
           <el-autocomplete
           class="inline-input"
@@ -36,32 +41,46 @@
         <div class="card" id="newAccount">
           <el-button type="info" plain style="font-size:20px;" @click="dialogAccount = true">Create New Account</el-button>
           <el-dialog title="Edit Profile" :visible.sync="dialogAccount" style="text-align:left;">
-            <el-form :model="form" label-width="15%">
-              <el-form-item label="First Name">
-                <el-input v-model="form.firstName"></el-input>
+            <el-form :model="form" label-width="25%" ref="form">
+              <el-form-item label="First Name"
+              prop="firstName"
+              :rules="rules.alphaStr">
+                <el-input v-model="form.firstName" maxlength="30" clearable></el-input>
               </el-form-item>
-              <el-form-item label="Last Name">
-                <el-input v-model="form.lastName"></el-input>
+              <el-form-item label="Last Name"
+              prop="lastName"
+              :rules="rules.alphaStr">
+                <el-input v-model="form.lastName" maxlength="30" clearable></el-input>
               </el-form-item>
-              <el-form-item label="Tel">
-                <el-input v-model="form.tel"></el-input>
+              <el-form-item label="Tel"
+              prop="tel"
+              :rules="rules.telNo">
+                <el-input v-model="form.tel" maxlength="10" clearable></el-input>
               </el-form-item>
-              <el-form-item label="Email">
-                <el-input v-model="form.email"></el-input>
+              <el-form-item label="Email"
+              prop="email"
+              :rules="rules.emailAddr">
+                <el-input v-model="form.email" clearable></el-input>
               </el-form-item>
-              <el-form-item label="Username">
-                <el-input v-model="form.username" maxlength=20 clearable></el-input>
+              <el-form-item label="Username"
+              prop="username"
+              :rules="rules.username">
+                <el-input v-model="form.username" maxlength="15" clearable></el-input>
               </el-form-item>
-              <el-form-item label="Password">
-                <el-input v-model="form.password" type="password" maxlength=20 clearable></el-input>
+              <el-form-item label="Password"
+              prop="password"
+              :rules="rules.password">
+                <el-input v-model="form.password" type="password" clearable></el-input>
               </el-form-item>
-              <el-form-item label="Confirm Password">
-                <el-input v-model="form.cfPassword" type="password" maxlength=20 clearable></el-input>
+              <el-form-item label="Confirm Password"
+              prop="cfPassword"
+              :rules="rules.rePassword">
+                <el-input v-model="form.cfPassword" type="password"clearable></el-input>
               </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-              <el-button type="info" plain @click="createAccount('form')">Confirm</el-button>
-              <el-button type="info" plain @click="discard('form')">Cancel</el-button>
+              <el-button type="info" plain @click="createAccount">Confirm</el-button>
+              <el-button type="info" plain @click="discard">Cancel</el-button>
             </span>
           </el-dialog>
         </div>

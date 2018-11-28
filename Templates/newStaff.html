@@ -25,33 +25,54 @@
       <div class="column side"></div>
       <div class="column middle">
         <div class="card" id="newStaff">
-          <el-form ref="form" :model="form" label-width="130px">
-            <el-form-item label="First Name">
-              <el-input v-model="form.firstName"></el-input>
+          <el-form :model="form" ref="form" label-width="130px">
+            <el-form-item label="First Name"
+            label-width="25%"
+            prop="firstName"
+            :rules="rules.alphaStr">
+              <el-input v-model="form.firstName" maxlength="30" clearable></el-input>
             </el-form-item>
-            <el-form-item label="Last Name">
-              <el-input v-model="form.lastName"></el-input>
+            <el-form-item label="Last Name"
+            label-width="25%"
+            prop="lastName"
+            :rules="rules.alphaStr">
+              <el-input v-model="form.lastName" maxlength="30" clearable></el-input>
             </el-form-item>
-            <el-form-item label="Tel">
-              <el-input v-model="form.tel"></el-input>
+            <el-form-item label="Tel"
+            label-width="25%"
+            prop="tel"
+            :rules="rules.telNo">
+              <el-input v-model="form.tel" maxlength="10" clearable></el-input>
             </el-form-item>
-            <el-form-item label="Email">
-              <el-input v-model="form.email"></el-input>
+            <el-form-item label="Email"
+            label-width="25%"
+            prop="email"
+            :rules="rules.emailAddr">
+              <el-input v-model="form.email" clearable></el-input>
             </el-form-item>
-            <el-form-item label="Status">
+            <el-form-item label="Status" label-width="25%"   >
               <el-radio-group v-model="form.status" fill="#909497">
                 <el-radio-button label="Staff"></el-radio-button>
                 <el-radio-button label="Doctor"></el-radio-button>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="Username">
-              <el-input v-model="form.username"></el-input>
+            <el-form-item label="Username"
+            label-width="25%"
+            prop="username"
+            :rules="rules.username">
+              <el-input v-model="form.username" maxlength="15" clearable></el-input>
             </el-form-item>
-            <el-form-item label="Password">
-              <el-input v-model="form.password" type="password"></el-input>
+            <el-form-item label="Password"
+            label-width="25%"
+            prop="password"
+            :rules="rules.password">
+              <el-input v-model="form.password" type="password" clearable></el-input>
             </el-form-item>
-            <el-form-item label="Confirm Password">
-              <el-input v-model="form.cfPassword" type="password"></el-input>
+            <el-form-item label="Confirm Password"
+            label-width="25%"
+            prop="cfPassword"
+            :rules="rules.rePassword">
+              <el-input v-model="form.cfPassword" type="password" clearable></el-input>
             </el-form-item>
             <el-form-item style="margin-left:40%">
               <el-button type="info" plain @click="createAccount">Create</el-button>
