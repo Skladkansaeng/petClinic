@@ -59,8 +59,8 @@ def newPet(res):
                 return JsonResponse({"res": "cant"},safe=False)
     save = mypet(user =  objUser,name= objQ['name'] ,type = objQ['type'],birthDate=parse(objQ['birthDate']),age=pet_age,breed=objQ['breed'],sickness=objQ['sickness'])
     save.save()
-
     return JsonResponse({"res": "can"},safe=False)
+
 def get_staffInfo(request):
     objUser = staff.objects.all()
     obj = json.loads(request.body.decode('utf-8'))
@@ -73,15 +73,19 @@ def get_staffInfo(request):
                 lst.append(d)
 
     return JsonResponse(lst, safe=False)
+
 def makeQueue(res):
     status = True
     objQ = json.loads(res.body.decode('utf-8'))
     objpet = queue.objects.all()
     for j in objpet:
-        if j.pet_name.user.name == objQ['username']:                
+        if j.pet_name.user.username == objQ['username']:                
             if objQ['pet_name'] == j.pet_name.name:
-                status = False
-                return JsonResponse({"res": "Have"},safe=False)
+                print( j.pet_want == objQ['pet_want'])
+                if j.pet_want == objQ['pet_want']:
+                    status = False
+                    return JsonResponse({"res": "Have"},safe=False)
+                
     for i in mypet.objects.all():
         if i.user.username == objQ['username']: 
             if objQ['pet_name'] == i.name:

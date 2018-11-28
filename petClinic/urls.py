@@ -52,6 +52,8 @@ urlpatterns = [
     path('user/medRecData/',userViews.medRecData),
     path('user/vacRecData/',userViews.vacRecData),
     path('user/delPet/',userViews.delPet),
+    path('userInfo/get_staffInfo/',info_doctor.get_staffInfo),
+    
 
 
 ]
