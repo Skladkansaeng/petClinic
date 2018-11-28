@@ -34,12 +34,12 @@ new Vue({
     loadAll(queryString) {
       axios({
         method: 'push',
-        url: 'getuserInfor',
+        url: '../getuserInfor',
         data: {
              'str_input':queryString.toLowerCase(),
         },
         xsrfCookieName: 'csrftoken',
-        
+
 //  xsrfCookieName: '{{ csrf_token }}',
         xsrfHeaderName: 'X-CSRFToken',
         headers: {
@@ -48,6 +48,7 @@ new Vue({
         }).then(res => {
           console.log(res.data);
                return this.listQ = res.data;
+
         });
 return this.listQ;
       // return [

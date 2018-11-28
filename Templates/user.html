@@ -326,7 +326,8 @@
                         'X-Requested-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
                }).then(res => {
-                       window.location.href="../user/{{pk}}";
+                 window.location.reload();
+                       // window.location.href="../user/{{pk}}";
                });
               this.dialogFormVisible = false;
             } else {

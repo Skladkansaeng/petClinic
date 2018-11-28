@@ -7,7 +7,7 @@ from doctor.models import queue,vaccine,medical,appointment
 from user.models import mypet
 from createStaff.models import staff
 from django.core import serializers
-
+import base64
 # from .models import Test
 def doctor(request):
     # test = Test.objects.all()
@@ -112,6 +112,11 @@ def Makeappointment(req):
             break
     db = appointment(pet_name= i,next_due=obj['next_due'],time = obj['time'],Description=obj['Description'],username = obj['username'])
     # print(db)
+    for i in queue.objects.all():
+        if obj['pet_name'] == i.name and obj['username'] == i.user.username:
+            objM = i
+            break
+    objM.delete()
     db.save()
     return JsonResponse({"x": "doctor"})
 
@@ -131,6 +136,9 @@ def createMedical(req):
     return JsonResponse({"x": "doctor"})
 
 def fonTest(req,pk):
+    pk = pk.encode()
+    decoded_data = base64.b64decode(pk)
+    pk = decoded_data.decode()
     obj = staff.objects.get(pk=pk)
     context={"name": obj.name,"surname": obj.surname,"username":obj.username}
     # context={"name":'d',"surname":'p'}

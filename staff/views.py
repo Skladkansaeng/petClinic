@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from user.models import user
 from createStaff.models import staff
 import uuid
+import base64
 import hashlib
 # # Create your views here.
 # def staff(request):
@@ -25,19 +26,23 @@ def createUser(request):
     return JsonResponse({"w": "wr"})
 
 def get_userInfo(request):
+    # print("fffffffffff")
     objUser = user.objects.all()
     obj = json.loads(request.body.decode('utf-8'))
 #     print(obj)
     lst = []
     findUser = obj['str_input']
     for pn in objUser:
-        if pn.name[:len(findUser)].lower() == findUser :    
+        if pn.name[:len(findUser)].lower() == findUser :
                 d={"value": pn.name+ " "+ pn.surname,"link": pn.pk}
                 lst.append(d)
 
     return JsonResponse(lst, safe=False)
 
 def fonTest(req,pk):
+    pk = pk.encode()
+    decoded_data = base64.b64decode(pk)
+    pk = decoded_data.decode()
     obj = staff.objects.get(pk=pk)
     context={"name": obj.name,"surname": obj.surname}
     # context={"name":'d',"surname":'p'}

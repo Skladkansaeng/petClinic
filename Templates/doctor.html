@@ -18,7 +18,7 @@
     <div class="header">
         <h1>Pet Clinic</h1>
       </div>
-
+6
       <div class="topnav">
         <a href="../" style="float:right">Logout</a>
       </div>
@@ -314,7 +314,7 @@
                          method: 'push',
                          url: 'doctorData/',
                          data: {
-                              'username':'{{name}}' +" "+'{{surname}}'                          
+                              'username':'{{name}}' +" "+'{{surname}}'
                          },
                          xsrfCookieName: 'csrftoken',
                          xsrfHeaderName: 'X-CSRFToken',
@@ -331,7 +331,7 @@
         if(this.listQ[this.selectedIndex].task == 'Medical'){
           axios({
                method: 'push',
-               url: 'getMedical',
+               url: '../getMedical',
                data: {
                     'name':this.listQ[this.selectedIndex].petName,
                     'username':this.listQ[this.selectedIndex].username,
@@ -348,7 +348,7 @@
         else{
           axios({
                method: 'push',
-               url: 'getVaccine',
+               url: '../getVaccine',
                data: {
                     'name':this.listQ[this.selectedIndex].petName,
                     'username':this.listQ[this.selectedIndex].username,
@@ -379,7 +379,7 @@
                     var date = new Date(this.appointmentForm.date);
                     axios({
                          method: 'push',
-                         url: 'Makeappointment',
+                         url: '../Makeappointment',
                          data: {
                               'pet_name':this.listQ[this.selectedIndex].petName,
                               'next_due':date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear(),
@@ -419,7 +419,7 @@
                 var today = new Date();
                 axios({
                      method: 'post',
-                     url: 'createMedical',
+                     url: '../createMedical',
                      data: {
                       'username':this.listQ[this.selectedIndex].username,
                           'pet_name':this.listQ[this.selectedIndex].petName,
@@ -464,7 +464,7 @@
               var date = new Date(this.vaccineForm.nextDue);
               axios({
                    method: 'post',
-                   url: 'createVaccine',
+                   url: '../createVaccine',
                    data: {
                     'username':this.listQ[this.selectedIndex].username,
                         'pet_name':this.listQ[this.selectedIndex].petName,
@@ -534,7 +534,7 @@
                          method: 'push',
                          url: 'doctorData/',
                          data: {
-                          'username':'{{name}}' +" "+'{{surname}}'                          
+                          'username':'{{name}}' +" "+'{{surname}}'
                          },
                          xsrfCookieName: 'csrftoken',
                          xsrfHeaderName: 'X-CSRFToken',

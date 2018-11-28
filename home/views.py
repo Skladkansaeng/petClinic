@@ -38,7 +38,11 @@ def checkUser(request):
         password_hash = objStaff[0].password
         if check_password(objStaff[0].password,obj['password']):
             st = staff.objects.get(username=obj['username'], password=password_hash)
-            res = JsonResponse({"status": st.status,"pk": st.pk})
+            pk_str = str(st.pk).encode()
+            encoded_data = base64.b64encode(pk_str)
+            encoded_data = str(encoded_data)[2:-1]
+
+            res = JsonResponse({"status": st.status,"pk": encoded_data})
         # set_cookie(res,'YAY','slkdngsdfigskfngsdlfng')
             return res
         else:
@@ -49,9 +53,7 @@ def checkUser(request):
             us = user.objects.get(username=obj['username'], password=password_hash)
             pk_str = str(us.pk).encode()
             encoded_data = base64.b64encode(pk_str)
-            print('oak')
             encoded_data = str(encoded_data)[2:-1]
-            print(encoded_data)
             res = JsonResponse({"status": "User", "pk": encoded_data})
 
             # set_cookie(res,'YAY','tyuiopoiughjolplkjhjkl')
