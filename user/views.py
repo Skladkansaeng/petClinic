@@ -2,6 +2,7 @@ from django.shortcuts import render
 from user.models import *
 from doctor.models import *
 import json
+import base64
 import datetime
 from django.http import JsonResponse
 import operator
@@ -34,29 +35,27 @@ def appData(request,pk):
             elif date.year == int(a.next_due[6:]) and date.month == int(a.next_due[3:5]) and date.day <= int(a.next_due[:2]):
                 apm.append(d)
 
-
-
     for i in range(len(apm)-1,-1,-1):
         for j in range(i):
             year1 = apm[j]["date"]
             year2 = apm[j+1]["date"]
             if int(year1[:2]) > int(year2[:2]):
                 apm[j],apm[j+1] = apm[j+1],apm[j]
-    print(apm)
+
     for i in range(len(apm)-1,-1,-1):
         for j in range(i):
             year1 = apm[j]["date"]
             year2 = apm[j+1]["date"]
             if int(year1[3:5]) > int(year2[3:5]):
                 apm[j],apm[j+1] = apm[j+1],apm[j]
-    print(apm)
+
     for i in range(len(apm)-1,-1,-1):
         for j in range(i):
             year1 = apm[j]["date"]
             year2 = apm[j+1]["date"]
             if int(year1[6:]) > int(year2[6:]):
                 apm[j],apm[j+1] = apm[j+1],apm[j]
-    print(apm)
+
     return JsonResponse(apm, safe=False)
 
 def medRecData(request):
@@ -99,6 +98,12 @@ def delPet(req):
 
 
 def fonTest(req,pk):
+    print('fontest',pk)
+    pk = pk.encode()
+    decoded_data = base64.b64decode(pk)
+    print(decoded_data)
+    pk = decoded_data.decode()
+    print(pk)
     obj = user.objects.get(pk=pk)
     # app = appointment.objects.get(pet_name = obj.)
     context={"name": obj.name,"surname": obj.surname,"email":obj.email,"tel":obj.tel,"pk":pk}

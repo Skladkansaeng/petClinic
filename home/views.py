@@ -2,6 +2,7 @@ from django.shortcuts import render
 import json
 from django.http import JsonResponse
 from user.models import user
+import base64
 from createStaff.models import staff
 # Create your views here.
 def home(request):
@@ -9,7 +10,7 @@ def home(request):
 
 def checkUser(request):
     obj = json.loads(request.body.decode('utf-8'))
-    print(obj)
+
     objUser = user.objects.filter(username=obj['username'],password=obj['password'])
     objStaff = staff.objects.filter(username=obj['username'],password=obj['password'])
     if not objUser and not objStaff:
@@ -21,6 +22,12 @@ def checkUser(request):
         return res
     else:
         us = user.objects.get(username=obj['username'], password=obj['password'])
-        res = JsonResponse({"status": "User", "pk": us.pk})
+        pk_str = str(us.pk).encode()
+        encoded_data = base64.b64encode(pk_str)
+        print('oak')
+        encoded_data = str(encoded_data)[2:-1]
+        print(encoded_data)
+        res = JsonResponse({"status": "User", "pk": encoded_data})
+
         # set_cookie(res,'YAY','tyuiopoiughjolplkjhjkl')
         return res

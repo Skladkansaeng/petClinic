@@ -43,7 +43,7 @@ urlpatterns = [
     path('userInfo/newPet/',info_doctor.newPet),
     path('makeQueue/',info_doctor.makeQueue),
     path('userInfo/<int:pk>',info_doctor.userInfo),
-    path('user/<int:pk>',userViews.fonTest),
+    path('user/<str:pk>',userViews.fonTest),
     path('doctor/<int:pk>', views_doctor.fonTest),
     path('staff/<int:pk>', staffViews.fonTest),
     path('user/editProfile/<int:pk>',userViews.editProfile),
@@ -53,7 +53,7 @@ urlpatterns = [
     path('user/vacRecData/',userViews.vacRecData),
     path('user/delPet/',userViews.delPet),
     path('userInfo/get_staffInfo/',info_doctor.get_staffInfo),
-    
+
 
 
 ]
