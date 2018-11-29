@@ -153,7 +153,8 @@
                           v-model="vaccineForm.nextDue"
                           type="date"
                           format="dd/MM/yyyy"
-                          placeholder="Pick a day">
+                          placeholder="Pick a day"
+                          :picker-options="noNeedPast">
                         </el-date-picker>
                       </el-form-item>
                     </el-col>
@@ -191,7 +192,8 @@
                           <el-date-picker v-model="appointmentForm.date"
                           type="date"
                           format="dd/MM/yyyy"
-                          placeholder="Pick a day">
+                          placeholder="Pick a day"
+                          :picker-options="noNeedPast">
                           </el-date-picker>
                         </el-form-item>
                       </el-col>
@@ -244,6 +246,11 @@
   el:"#queue",
   delimiters: ['[[', ']]'],
   data: {
+    noNeedPast:{
+      disabledDate(future){
+        return future.getTime() <= Date.now();
+      }
+    },
     firstName:'{{name}}',
     lastName:'{{surname}}',
     listQ:[],

@@ -326,7 +326,7 @@
     </div>
     <div class="column side"></div>
   </div>
- 
+
 </body>
 <!-- import Vue before Element -->
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
@@ -547,7 +547,7 @@ new Vue({
     // this.resetStatus();
 
     },
-    
+
     submitNewPet(){
       this.$refs.newPet.validate((valid) => {
           if (valid) {
@@ -630,7 +630,7 @@ new Vue({
              'str_input':str.toLowerCase(),
         },
         xsrfCookieName: 'csrftoken',
-        
+
 //  xsrfCookieName: '{{ csrf_token }}',
         xsrfHeaderName: 'X-CSRFToken',
         headers: {
@@ -664,7 +664,7 @@ return this.listQ;
              'str_input':'{{username}}',
         },
         xsrfCookieName: 'csrftoken',
-        
+
 //      xsrfCookieName: '{{ csrf_token }}',
         xsrfHeaderName: 'X-CSRFToken',
         headers: {
@@ -675,7 +675,7 @@ return this.listQ;
           this.listPet = res.data;
         });
    }
-  
+
 });
 
 </script>
