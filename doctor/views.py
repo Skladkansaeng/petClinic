@@ -98,7 +98,7 @@ def createVaccine(req):
     print(dbApp)
     dbApp.save()
     for i in queue.objects.all():
-        if obj['pet_name'] == i.pet_name.name and obj['username'] == i.pet_name.user.username:
+        if obj['pet_name'] == i.pet_name.name and obj['username'] == i.pet_name.user.username and i.pet_want == 'Vaccine':
             objM = i
             break
     objM.delete()
@@ -121,7 +121,7 @@ def Makeappointment(req):
     db = appointment(pet_name= i,next_due=obj['next_due'],time = obj['time'],Description=obj['Description'],username = obj['username'])
     # print(db)
     for i in queue.objects.all():
-        if obj['pet_name'] == i.pet_name.name and obj['username'] == i.pet_name.user.username:
+        if obj['pet_name'] == i.pet_name.name and obj['username'] == i.pet_name.user.username and i.pet_want == 'Medical':
             objM = i
             break
     objM.delete()
@@ -137,7 +137,7 @@ def createMedical(req):
     db = medical(pet_name =i,medical_date=obj['medical_date'],symptom=obj['symptom'],medicine=obj['medicine'],monation=obj['monation'],veterinarian=obj['veterinarian'],age=i.age)
     db.save()
     for i in queue.objects.all():
-        if obj['pet_name'] == i.pet_name.name and i.pet_name.user.username == obj['username']:
+        if obj['pet_name'] == i.pet_name.name and i.pet_name.user.username == obj['username'] and i.pet_want == 'Medical':
             objM = i
             break
     objM.delete()
