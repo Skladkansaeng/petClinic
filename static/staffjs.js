@@ -127,11 +127,11 @@ new Vue({
         this.$refs.form.validate((valid) => {
         if (valid) {
           if(this.form.password === this.form.cfPassword){
-            this.$message({
-              message: 'Account Created',
-              type: 'success',
-              center: true
-            });
+            // this.$message({
+            //   message: 'Account Created',
+            //   type: 'success',
+            //   center: true
+            // });
             axios({
                 method: 'post',
                 url: '../oak/',
@@ -150,9 +150,25 @@ new Vue({
                          'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
                 }).then(res => {
                   console.log('aas');
+                  if (res.data['w'] === "cancel"  ) {
+                    this.$message({
+                      message: 'This Username Already Exist',
+                      type: 'error',
+                      center: true
+                    });
+                  }
+                  else {
+                    this.$message({
+                      message: 'Account Created',
+                      type: 'success',
+                      center: true
+                    });
+                    this.dialogAccount = false;
+                    this.$refs.form.resetFields();
+                  }
                 });
-            this.dialogAccount = false;
-            this.$refs.form.resetFields();
+            // this.dialogAccount = false;
+            // this.$refs.form.resetFields();
           }
           else {
             this.$message({

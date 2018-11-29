@@ -24,35 +24,37 @@ def appData(request,pk):
     obj = user.objects.get(pk=pk)
     pet = mypet.objects.filter(user = obj)
     apm = []
+
     for p in pet:
         app = appointment.objects.filter(pet_name = p)
         for a in app:
+            temp = a.next_due.split('/')
             d = {"pet":a.pet_name.name , "date":a.next_due , "time":a.time , "description":a.Description}
-            if date.year < int(a.next_due[6:]):
+            if date.year < int(temp[2]):
                 apm.append(d)
-            elif date.year == int(a.next_due[6:]) and date.month < int(a.next_due[3:5]) :
+            elif date.year == int(temp[2]) and date.month < int(temp[1]) :
                 apm.append(d)
-            elif date.year == int(a.next_due[6:]) and date.month == int(a.next_due[3:5]) and date.day <= int(a.next_due[:2]):
+            elif date.year == int(temp[2]) and date.month == int(temp[1]) and date.day <= int(temp[0]):
                 apm.append(d)
     for i in range(len(apm)-1,-1,-1):
         for j in range(i):
-            year1 = apm[j]["date"]
-            year2 = apm[j+1]["date"]
-            if int(year1[:2]) > int(year2[:2]):
+            year1 = apm[j]["date"].split('/')
+            year2 = apm[j+1]["date"].split('/')
+            if int(year1[0]) > int(year2[0]):
                 apm[j],apm[j+1] = apm[j+1],apm[j]
     print(apm)
     for i in range(len(apm)-1,-1,-1):
         for j in range(i):
-            year1 = apm[j]["date"]
-            year2 = apm[j+1]["date"]
-            if int(year1[3:5]) > int(year2[3:5]):
+            year1 = apm[j]["date"].split('/')
+            year2 = apm[j+1]["date"].split('/')
+            if int(year1[1]) > int(year2[1]):
                 apm[j],apm[j+1] = apm[j+1],apm[j]
     print(apm)
     for i in range(len(apm)-1,-1,-1):
         for j in range(i):
-            year1 = apm[j]["date"]
-            year2 = apm[j+1]["date"]
-            if int(year1[6:]) > int(year2[6:]):
+            year1 = apm[j]["date"].split('/')
+            year2 = apm[j+1]["date"].split('/')
+            if int(year1[2]) > int(year2[2]):
                 apm[j],apm[j+1] = apm[j+1],apm[j]
     print(apm)
     return JsonResponse(apm, safe=False)

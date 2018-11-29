@@ -93,7 +93,8 @@ def createVaccine(req):
             break
     db = vaccine(pet_name= i,vaccine_date=obj['vaccine_date'],vaccine_time=obj['vaccine_time'],immunization=obj['immunization'],vaccine=obj['vaccine'],dose=obj['dose'],next_due=obj['next_due'],veterinarian=obj['veterinarian'],age=i.age)
     db.save()
-    dbApp = appointment(pet_name=i,next_due=obj['next_due'],time=obj['vaccine_time'],Description=obj['description'])
+    print(obj['username'])
+    dbApp = appointment(pet_name=i,next_due=obj['next_due'],time=obj['vaccine_time'],Description=obj['description'],username = obj['username'])
     print(dbApp)
     dbApp.save()
     for i in queue.objects.all():
@@ -116,6 +117,7 @@ def Makeappointment(req):
         if obj['pet_name'] == i.name:
             objM = i
             break
+    print(obj['username'])
     db = appointment(pet_name= i,next_due=obj['next_due'],time = obj['time'],Description=obj['Description'],username = obj['username'])
     # print(db)
     for i in queue.objects.all():

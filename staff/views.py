@@ -19,6 +19,11 @@ def createUser(request):
     print('test')
     obj = json.loads(request.body.decode('utf-8'))
     print(obj)
+    objUser = user.objects.all()
+    for u in objUser:
+        if u.username == obj['username']:
+            return JsonResponse({"w": "cancel"})
+
     password_hash = hash_password(obj['password'])
     db = user(name = obj['firstname'] , surname = obj['lastname'] , tel =obj['tel'] ,
     email= obj['email'] , username= obj['username'], password= password_hash)
