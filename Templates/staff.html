@@ -40,7 +40,7 @@
         </div>
         <div class="card" id="newAccount">
           <el-button type="info" plain style="font-size:20px;" @click="dialogAccount = true">Create New Account</el-button>
-          <el-dialog title="Edit Profile" :visible.sync="dialogAccount" style="text-align:left;">
+          <el-dialog title="Create Account" :visible.sync="dialogAccount" style="text-align:left;">
             <el-form :model="form" label-width="25%" ref="form">
               <el-form-item label="First Name"
               prop="firstName"

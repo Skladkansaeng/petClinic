@@ -405,7 +405,7 @@
                                   'X-Requested-With': 'XMLHttpRequest',
                                   'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
                          }).then(res => {
-
+                          window.location.href="";
                          });
                     this.dialogFormVisible = false;
                     this.medicalForm.symptom = '';
@@ -413,6 +413,7 @@
                     this.medicalForm.notation = '';
                     this.$refs.appointmentForm[0].resetFields();
                     this.$message({
+                      
                       message: 'Medical Task & Appointment Submitted',
                       type: 'success',
                       center: true
