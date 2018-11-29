@@ -27,7 +27,9 @@ def appData(request,pk):
 
     for p in pet:
         app = appointment.objects.filter(pet_name = p)
+        print(app)
         for a in app:
+
             temp = a.next_due.split('/')
             d = {"pet":a.pet_name.name , "date":a.next_due , "time":a.time , "description":a.Description}
             if date.year < int(temp[2]):
