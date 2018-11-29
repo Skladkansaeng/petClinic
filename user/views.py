@@ -38,6 +38,20 @@ def appData(request,pk):
                 apm.append(d)
             elif date.year == int(temp[2]) and date.month == int(temp[1]) and date.day <= int(temp[0]):
                 apm.append(d)
+                
+    for i in range(len(apm)-1,-1,-1):
+        for j in range(i):
+            year1 = apm[j]["time"].split(':')
+            year2 = apm[j+1]["time"].split(':')
+            if int(year1[1]) > int(year2[1]):
+                apm[j],apm[j+1] = apm[j+1],apm[j]
+    for i in range(len(apm)-1,-1,-1):
+        for j in range(i):
+            year1 = apm[j]["time"].split(':')
+            year2 = apm[j+1]["time"].split(':')
+            if int(year1[0]) > int(year2[0]):
+                apm[j],apm[j+1] = apm[j+1],apm[j]
+
     for i in range(len(apm)-1,-1,-1):
         for j in range(i):
             year1 = apm[j]["date"].split('/')
