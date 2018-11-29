@@ -58,7 +58,9 @@
     .fakeimg {
         background-color: #aaa;
         width: 100%;
-        padding: 20px;
+        padding: 5px;
+        text-align: center;
+        font-size: 18px;
     }
     /* Add a card effect for articles */
     .card {
@@ -113,18 +115,22 @@
     <div class="row">
       <div class="leftcolumn">
         <div class="card">
-          <h2>TITLE HEADING</h2>
-          <h5>Title description, Dec 7, 2017</h5>
-          <div class="fakeimg" style="height:200px;">Image</div>
-          <p>Some text..</p>
-          <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+          <h2>Pet Clinic @Ladkrabang</h2>
+          <p style="font-size:18px">&emsp;&emsp;Show your dog or cat some extra love with veterinary care from our animal clinic in Ladkrabang, Thailand.<br><br>
+            Pet Clinic is a veterinarian-owned-and-operated facility that has served pets and their owners since 2018.<br><br>
+            On-staff veterinarian, Dr. Warisa Saisema, provides animal care expertise at very reasonable prices.<br> </p>
+          <div class="fakeimg" style="height:200px;">
+            <img src="{% static "prt.png" %}" height="200">
+          </div>
         </div>
         <div class="card">
-          <h2>TITLE HEADING</h2>
-          <h5>Title description, Sep 2, 2017</h5>
-          <div class="fakeimg" style="height:200px;">Image</div>
-          <p>Some text..</p>
-          <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+          <h2>Veterinary Medical & Surgical Care</h2>
+          <p style="font-size:18px">&emsp;&emsp;Solve your pet's health problems with care and treatment from Pet Clinic. We specialize in veterinary <br><br>
+             medical care for dogs and cats. From vaccinations to veterinary surgical care, we perform the necessary <br><br>
+             procedures to restore your pet's health. Preventative care is available to avert the onset of many conditions. <br> </p>
+          <div class="fakeimg" style="height:200px;">
+            <img src="{% static "dog.png" %}"><img src="{% static "catt.png" %}" height="200" style="float:left; padding-left:50px">
+          </div>
         </div>
       </div>
       <div class="rightcolumn">
@@ -154,20 +160,23 @@
           </el-form>
         </div>
         <div class="card">
-          <h3>Popular Post</h3>
-          <div class="fakeimg"><p>Image</p></div>
-          <div class="fakeimg"><p>Image</p></div>
-          <div class="fakeimg"><p>Image</p></div>
+          <h3>Hours of Operation</h3>
+          <div class="fakeimg"><p>Monday - Saturday</p></div>
+          <br>
+          <div class="fakeimg"><p>8:00 a.m. - 8:00 p.m.</p></div>
         </div>
         <div class="card">
-          <h3>Follow Me</h3>
-          <p>Some text..</p>
+          <h3>Contact Us</h3>
+          <p style="font-size:16px">Tel: 0123456789<br><br>
+            Email: petClinic@pc.com <br><br>
+            Address: ECC-508 ECC Building <br><br>Ladkrabang,
+            Bangkok, 10520 </p>
         </div>
       </div>
     </div>
 
     <div class="footer">
-      <h2>Footer</h2>
+      <h2 style="font-style:italic">Animals are Closely Supervised - Proof of Vaccination Required</h2>
     </div>
 
   </body>
