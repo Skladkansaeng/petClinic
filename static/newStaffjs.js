@@ -63,7 +63,7 @@ new Vue({
                    method: 'post',
                    url: 'created/',
                    data: {
-                        'firstname':this.form.username,
+                        'firstname':this.form.firstName,
                         'lastname':this.form.lastName,
                         'tel':this.form.tel,
                         'email':this.form.email,
