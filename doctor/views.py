@@ -58,32 +58,20 @@ def getMedical(req):
 
 
 def sendJson(req):
-    objQ =queue.objects.all()
-    obj = json.loads(req.body.decode('utf-8'))
-    print(obj['username'])
-    lst = []
-    for pn in objQ:
-        # print(pn.pet_name)
-        # d = {}
-        # d['petName']=pn.pet_name.name
-        # d['type']=pn.pet_name.type
-        # d['Weight']=pn.pet_weight
-        # d['heartRate']=pn.pet_HeartRate
-        # d['dehydration']=pn.pet_Dehydration
-        # d['task']=pn.pet_want
-         if pn.veterinarian == obj['username']:
-            d = {'username':pn.pet_name.user.username,'petName': pn.pet_name.name,'type':pn.pet_name.type,'age':pn.pet_name.age,'breed':pn.pet_name.breed,'weight':pn.pet_weight,'heartRate':pn.pet_HeartRate,'dehydration':pn.pet_Dehydration,'restRate':pn.pet_restRate,'task':pn.pet_want}
-            lst.append(d)
-        # print(lst)
-    # for i in range(len(objQ)-1,-1,-1):
-        # if objQ[i].veterinarian == obj['username']:
-    #         d = {'username':objQ[i].pet_name.user.username,'petName': objQ[i].pet_name.name,'type':objQ[i].pet_name.type,'age':objQ[i].pet_name.age,'breed':objQ[i].pet_name.breed,'weight':objQ[i].pet_weight,'heartRate':objQ[i].pet_HeartRate,'dehydration':objQ[i].pet_Dehydration,'restRate':objQ[i].pet_restRate,'task':objQ[i].pet_want}
-    #         lst.append(d)
-    # jsongen = json.dumps(lst)
-    # jsongen  = serializers.serialize('json', objQ)
-    # print(jsongen[1])
-
-    return JsonResponse(lst, safe=False)
+    insession = req.session.get('username')
+    objUser = staff.objects.filter(username = insession)
+    if(len(objUser) > 0 ):
+        objQ =queue.objects.all()
+        obj = json.loads(req.body.decode('utf-8'))
+        print(obj['username'])
+        lst = []
+        for pn in objQ: 
+            if pn.veterinarian == obj['username']:
+                d = {'username':pn.pet_name.user.username,'petName': pn.pet_name.name,'type':pn.pet_name.type,'age':pn.pet_name.age,'breed':pn.pet_name.breed,'weight':pn.pet_weight,'heartRate':pn.pet_HeartRate,'dehydration':pn.pet_Dehydration,'restRate':pn.pet_restRate,'task':pn.pet_want}
+                lst.append(d)
+        return JsonResponse(lst, safe=False)
+    else:
+        return JsonResponse({"S": "No"})
 
 def createVaccine(req):
     obj = json.loads(req.body.decode('utf-8'))
@@ -144,10 +132,16 @@ def createMedical(req):
     return JsonResponse({"x": "doctor"})
 
 def fonTest(req,pk):
-    pk = pk.encode()
-    decoded_data = base64.b64decode(pk)
-    pk = decoded_data.decode()
-    obj = staff.objects.get(pk=pk)
-    context={"name": obj.name,"surname": obj.surname,"username":obj.username}
-    # context={"name":'d',"surname":'p'}
-    return render(req,'doctor.html',context)
+    insession = req.session.get('username')
+    objUser = staff.objects.filter(username = insession)
+    if(len(objUser) > 0 ):
+        pk = pk.encode()
+        decoded_data = base64.b64decode(pk)
+        pk = decoded_data.decode()
+        obj = staff.objects.get(pk=pk)
+        context={"name": obj.name,"surname": obj.surname,"username":obj.username}
+        # context={"name":'d',"surname":'p'}
+        return render(req,'doctor.html',context)
+    else:
+        req.session['username'] = ''
+        return render(req,'index.html')

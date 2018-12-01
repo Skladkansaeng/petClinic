@@ -77,13 +77,18 @@ new Vue({
                             'X-Requested-With': 'XMLHttpRequest',
                             'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
                    }).then(res => {
+  
                      if (res.data['w'] === "cancel"  ) {
                        this.$message({
                          message: 'This Username Already Exist',
                          type: 'error',
                          center: true
-                       });
-                     }
+                       });                      
+                     }                
+                     else if (res.data['w'] === "refresh"  ) {
+                      
+                      window.location.href="";
+                    }
                      else {
                        this.$message({
                          message: 'Account Created',

@@ -13,10 +13,16 @@ import time
 from datetime import datetime
 # Create your views here.
 
-def userInfo(res,pk):
-    obj = user.objects.get(pk=pk)
-    context={"name": obj.name,"surname": obj.surname,"username": obj.username,"tel":obj.tel,"email":obj.email}
-    return render(res, 'userInfo.html',context)
+def userInfo(req,pk):
+    insession = req.session.get('username')
+    objUser = staff.objects.filter(username = insession)
+    if(len(objUser) > 0 ):
+        obj = user.objects.get(pk=pk)
+        context={"name": obj.name,"surname": obj.surname,"username": obj.username,"tel":obj.tel,"email":obj.email}
+        return render(req, 'userInfo.html',context)
+    else:
+        req.session['username'] = ''
+        return render(req,'index.html')
 
 def getDataJson(res):
   

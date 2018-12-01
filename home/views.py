@@ -8,9 +8,10 @@ import uuid
 import hashlib
 # Create your views here.
 def home(request):
+    request.session['username'] = ''
     return render(request, 'index.html')
+
 def hash_password(password):
-    # uuid is used to generate a random number
     salt = uuid.uuid4().hex
     return hashlib.sha256(salt.encode() + password.encode()).hexdigest() + ':' + salt
 
@@ -20,17 +21,8 @@ def check_password(hashed_password, user_password):
 
 def checkUser(request):
     obj = json.loads(request.body.decode('utf-8'))
-    # print(obj)
-
-    # password_hash = obj['password']
     objUser = user.objects.filter(username=obj['username'])
     objStaff = staff.objects.filter(username=obj['username'])
-    # print(objUser[0].password)
-    print(len(objUser))
-    # status = check_password(objUser[0].password,obj['password'])
-    # if status :
-    #     status = check_password(objStaff[0].password,obj['password'])
-
 
     if len(objUser) == 0 and len(objStaff) == 0 :
         return JsonResponse({"status": "No"})
@@ -41,9 +33,8 @@ def checkUser(request):
             pk_str = str(st.pk).encode()
             encoded_data = base64.b64encode(pk_str)
             encoded_data = str(encoded_data)[2:-1]
-
+            request.session['username'] = objStaff[0].username
             res = JsonResponse({"status": st.status,"pk": encoded_data})
-        # set_cookie(res,'YAY','slkdngsdfigskfngsdlfng')
             return res
         else:
             return JsonResponse({"status": "No"})
@@ -55,8 +46,7 @@ def checkUser(request):
             encoded_data = base64.b64encode(pk_str)
             encoded_data = str(encoded_data)[2:-1]
             res = JsonResponse({"status": "User", "pk": encoded_data})
-
-            # set_cookie(res,'YAY','tyuiopoiughjolplkjhjkl')
+            request.session['username'] = objUser[0].username
             return res
         else:
             return JsonResponse({"status": "No"})

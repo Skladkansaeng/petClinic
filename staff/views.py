@@ -16,7 +16,6 @@ def hash_password(password):
 
 
 def createUser(request):
-    print('test')
     obj = json.loads(request.body.decode('utf-8'))
     print(obj)
     objUser = user.objects.all()
@@ -31,10 +30,8 @@ def createUser(request):
     return JsonResponse({"w": "wr"})
 
 def get_userInfo(request):
-    # print("fffffffffff")
     objUser = user.objects.all()
     obj = json.loads(request.body.decode('utf-8'))
-#     print(obj)
     lst = []
     findUser = obj['str_input']
     for pn in objUser:
@@ -44,11 +41,16 @@ def get_userInfo(request):
 
     return JsonResponse(lst, safe=False)
 
-def fonTest(req,pk):
-    pk = pk.encode()
-    decoded_data = base64.b64decode(pk)
-    pk = decoded_data.decode()
-    obj = staff.objects.get(pk=pk)
-    context={"name": obj.name,"surname": obj.surname}
-    # context={"name":'d',"surname":'p'}
-    return render(req,'staff.html',context)
+def fonTest(req,pk):  
+    insession = req.session.get('username')
+    objStaff = staff.objects.filter(username = insession)     
+    if(len(objStaff) > 0 ):
+        # pk = pk.encode()
+        # decoded_data = base64.b64decode(pk)        
+        # pk = decoded_data.decode()        
+        obj = staff.objects.get(pk=objStaff[0].pk)
+        context={"name": obj.name,"surname": obj.surname}    
+        return render(req,'staff.html',context)
+    else:
+        req.session['username'] = ''
+        return render(req,'index.html')

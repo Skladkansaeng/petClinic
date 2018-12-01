@@ -7,12 +7,13 @@ new Vue({
       password:''
     }
   },
+  
   methods:{
-    userLogin:function() {
 
+    userLogin:function() {
       axios({
            method: 'post',
-           url: 'check/',
+           url: '../../check/',
            data: {
                 'username':this.loginForm.username,
                 'password':this.loginForm.password,

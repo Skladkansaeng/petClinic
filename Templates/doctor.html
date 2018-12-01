@@ -311,7 +311,7 @@
     }
   },
   created: function() {
-        setInterval(this.getList, 5000);
+        setInterval(this.getList, 2500);
 },
   methods: {
 
@@ -328,7 +328,13 @@
                                   'X-Requested-With': 'XMLHttpRequest',
                                   'Content-Type': 'application/json //x-www-form-urlencoded; charset=UTF-8'},
                          }).then(res => {
-                          this.listQ = res.data;
+                           if (res.data['S'] === 'No')
+                           {
+                            window.location.href="";
+                           }else{
+                            this.listQ = res.data;
+                           }
+                              
                          });
 
     },

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from user.models import *
 from doctor.models import *
+from createStaff.models import staff
 import json
 import base64
 import datetime
@@ -58,21 +59,18 @@ def appData(request,pk):
             year2 = apm[j+1]["date"].split('/')
             if int(year1[0]) > int(year2[0]):
                 apm[j],apm[j+1] = apm[j+1],apm[j]
-    print(apm)
     for i in range(len(apm)-1,-1,-1):
         for j in range(i):
             year1 = apm[j]["date"].split('/')
             year2 = apm[j+1]["date"].split('/')
             if int(year1[1]) > int(year2[1]):
                 apm[j],apm[j+1] = apm[j+1],apm[j]
-    print(apm)
     for i in range(len(apm)-1,-1,-1):
         for j in range(i):
             year1 = apm[j]["date"].split('/')
             year2 = apm[j+1]["date"].split('/')
             if int(year1[2]) > int(year2[2]):
                 apm[j],apm[j+1] = apm[j+1],apm[j]
-    print(apm)
     return JsonResponse(apm, safe=False)
 
 def medRecData(request):
@@ -87,8 +85,6 @@ def medRecData(request):
             d = {"date":r.medical_date , "age":r.age , "symptom":r.symptom , "medicine":r.medicine , "notation":r.monation , "vet":r.veterinarian }
             mpet.append(d)
         medRec.append(mpet)
-    # print("Medical----->",medRec,"\n")
-
     return JsonResponse(medRec, safe=False)
 
 def vacRecData(request):
@@ -103,7 +99,6 @@ def vacRecData(request):
             d = {"givenDate":r.vaccine_date , "age":r.age , "immunization":r.immunization , "vaccine":r.vaccine , "dose":r.dose , "nextDue":r.next_due , "vet":r.veterinarian }
             mpet.append(d)
         medRec.append(mpet)
-    # print("Vaccine----->",medRec,"\n")
     return JsonResponse(medRec, safe=False)
 
 def delPet(req):
@@ -115,17 +110,19 @@ def delPet(req):
 
 
 def fonTest(req,pk):
-    print('fontest',pk)
-    pk = pk.encode()
-    decoded_data = base64.b64decode(pk)
-    print(decoded_data)
-    pk = decoded_data.decode()
-    print(pk)
-    obj = user.objects.get(pk=pk)
-    # app = appointment.objects.get(pet_name = obj.)
-    context={"name": obj.name,"surname": obj.surname,"email":obj.email,"tel":obj.tel,"pk":pk}
-    # context={"name":'d',"surname":'p'}
-    return render(req,'user.html',context)
+    insession = req.session.get('username')
+    objUser = user.objects.filter(username = insession)
+    if(len(objUser) > 0 ):
+        pk = pk.encode()
+        decoded_data = base64.b64decode(pk)
+        pk = decoded_data.decode()
+        obj = user.objects.get(pk=pk) 
+        context={"name": obj.name,"surname": obj.surname,"email":obj.email,"tel":obj.tel,"pk":pk}
+        return render(req,'user.html',context)
+    else:
+        req.session['username'] = ''
+        return render(req,'index.html')
+
 
 def editProfile(request,pk):
     obj = json.loads(request.body.decode('utf-8'))
