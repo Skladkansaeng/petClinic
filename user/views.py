@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render ,redirect
 from user.models import *
 from doctor.models import *
 from createStaff.models import staff
@@ -112,13 +112,31 @@ def delPet(req):
 def fonTest(req,pk):
     insession = req.session.get('username')
     objUser = user.objects.filter(username = insession)
+    objStaff = staff.objects.filter(username = insession)
     if(len(objUser) > 0 ):
         pk = pk.encode()
         decoded_data = base64.b64decode(pk)
         pk = decoded_data.decode()
-        obj = user.objects.get(pk=pk) 
-        context={"name": obj.name,"surname": obj.surname,"email":obj.email,"tel":obj.tel,"pk":pk}
-        return render(req,'user.html',context)
+        if int(pk)== objUser[0].pk:
+            obj = user.objects.get(pk=pk) 
+            context={"name": obj.name,"surname": obj.surname,"email":obj.email,"tel":obj.tel,"pk":pk}
+            return render(req,'user.html',context)
+        else:
+            pk_str = str(objUser[0].pk).encode()
+            encoded_data = base64.b64encode(pk_str)
+            encoded_data = str(encoded_data)[2:-1]
+            str_url = '../user/'+encoded_data
+            print(str_url)
+            return redirect(str_url)           
+    elif (len(objStaff) > 0 ):
+        pk_str = str(objStaff[0].pk).encode()
+        encoded_data = base64.b64encode(pk_str)
+        encoded_data = str(encoded_data)[2:-1]
+        if objStaff[0].status == 'Doctor':
+            str_url = '../doctor/'+encoded_data
+        else :
+            str_url = '../staff/'+encoded_data
+        return redirect(str_url)
     else:
         req.session['username'] = ''
         return render(req,'index.html')

@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.template import loader
 import json
 from django.http import JsonResponse
 from doctor.models import queue,vaccine,medical,appointment
-from user.models import mypet
+from user.models import mypet,user
 from createStaff.models import staff
 from django.core import serializers
 import base64
@@ -133,15 +133,32 @@ def createMedical(req):
 
 def fonTest(req,pk):
     insession = req.session.get('username')
-    objUser = staff.objects.filter(username = insession)
-    if(len(objUser) > 0 ):
+    objUser = user.objects.filter(username = insession)
+    objStaff = staff.objects.filter(username = insession)
+    if(len(objStaff) > 0 ):        
         pk = pk.encode()
         decoded_data = base64.b64decode(pk)
-        pk = decoded_data.decode()
-        obj = staff.objects.get(pk=pk)
-        context={"name": obj.name,"surname": obj.surname,"username":obj.username}
-        # context={"name":'d',"surname":'p'}
-        return render(req,'doctor.html',context)
+        pk = decoded_data.decode()        
+        if int(pk) == objStaff[0].pk:
+            obj = staff.objects.get(pk=pk)
+            context={"name": obj.name,"surname": obj.surname,"username":obj.username}
+            # context={"name":'d',"surname":'p'}
+            return render(req,'doctor.html',context)
+        else:
+            pk_str = str(objStaff[0].pk).encode()
+            encoded_data = base64.b64encode(pk_str)
+            encoded_data = str(encoded_data)[2:-1]
+            if objStaff[0].status == 'Doctor':
+                str_url = '../doctor/'+encoded_data
+            else :
+                str_url = '../staff/'+encoded_data
+            return redirect(str_url)
+    elif(len(objUser) > 0 ):
+            pk_str = str(objUser[0].pk).encode()
+            encoded_data = base64.b64encode(pk_str)
+            encoded_data = str(encoded_data)[2:-1]
+            str_url = '../user/'+encoded_data
+            return redirect(str_url)   
     else:
         req.session['username'] = ''
         return render(req,'index.html')

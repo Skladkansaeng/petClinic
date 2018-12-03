@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 import json
 from django.http import JsonResponse
 from user.models import user
@@ -44,13 +44,30 @@ def get_userInfo(request):
 def fonTest(req,pk):  
     insession = req.session.get('username')
     objStaff = staff.objects.filter(username = insession)     
+    objUser = user.objects.filter(username = insession)    
     if(len(objStaff) > 0 ):
-        # pk = pk.encode()
-        # decoded_data = base64.b64decode(pk)        
-        # pk = decoded_data.decode()        
-        obj = staff.objects.get(pk=objStaff[0].pk)
-        context={"name": obj.name,"surname": obj.surname}    
-        return render(req,'staff.html',context)
+        pk = pk.encode()
+        decoded_data = base64.b64decode(pk)        
+        pk = decoded_data.decode()
+        if int(pk) == objStaff[0].pk:        
+            obj = staff.objects.get(pk=objStaff[0].pk)
+            context={"name": obj.name,"surname": obj.surname}    
+            return render(req,'staff.html',context)
+        else:
+            pk_str = str(objStaff[0].pk).encode()
+            encoded_data = base64.b64encode(pk_str)
+            encoded_data = str(encoded_data)[2:-1]
+            if objStaff[0].status == 'Doctor':
+                str_url = '../doctor/'+encoded_data
+            else :
+                str_url = '../staff/'+encoded_data
+            return redirect(str_url)
+    elif(len(objUser) > 0 ):
+            pk_str = str(objUser[0].pk).encode()
+            encoded_data = base64.b64encode(pk_str)
+            encoded_data = str(encoded_data)[2:-1]
+            str_url = '../user/'+encoded_data
+            return redirect(str_url)   
     else:
         req.session['username'] = ''
         return render(req,'index.html')

@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.template import loader
 import json
@@ -10,16 +9,31 @@ from createStaff.models import staff
 from django.core import serializers
 from dateutil.parser import parse
 import time
+import base64
 from datetime import datetime
 # Create your views here.
 
 def userInfo(req,pk):
     insession = req.session.get('username')
-    objUser = staff.objects.filter(username = insession)
-    if(len(objUser) > 0 ):
-        obj = user.objects.get(pk=pk)
-        context={"name": obj.name,"surname": obj.surname,"username": obj.username,"tel":obj.tel,"email":obj.email}
-        return render(req, 'userInfo.html',context)
+    objStaff = staff.objects.filter(username = insession)
+    objUser = user.objects.filter(username = insession)
+    if(len(objStaff) > 0 ):
+        if objStaff[0].status == 'Staff':
+            obj = user.objects.get(pk=pk)
+            context={"name": obj.name,"surname": obj.surname,"username": obj.username,"tel":obj.tel,"email":obj.email}
+            return render(req, 'userInfo.html',context)
+        else:
+                pk_str = str(objStaff[0].pk).encode()
+                encoded_data = base64.b64encode(pk_str)
+                encoded_data = str(encoded_data)[2:-1]
+                str_url = '../doctor/'+encoded_data
+                return redirect(str_url)
+    elif(len(objUser) > 0 ):
+            pk_str = str(objUser[0].pk).encode()
+            encoded_data = base64.b64encode(pk_str)
+            encoded_data = str(encoded_data)[2:-1]
+            str_url = '../user/'+encoded_data
+            return redirect(str_url)                      
     else:
         req.session['username'] = ''
         return render(req,'index.html')
